@@ -1,0 +1,313 @@
+---
+import Base from '../../layouts/Base.astro';
+import { velas, fragrances, fotoDe } from '../../data/velas.js';
+
+export function getStaticPaths() {
+  return velas.map((v) => ({ params: { slug: v.slug } }));
+}
+
+const { slug } = Astro.params;
+const vela = velas.find((v) => v.slug === slug);
+const frag = fragrances.find((f) => f.slug === vela.fragrance);
+const foto = fotoDe(vela.slug);
+const outras = velas.filter((v) => v.slug !== slug).slice(0, 3);
+---
+<Base title={`${vela.name} — Malumi`} description={vela.line}>
+
+<!-- TOPO DO PRODUTO -->
+<section class="p-top">
+  <div class="p-top-inner">
+    <div class="p-img" style={foto ? `background: url('${foto}') center/cover;` : `background: ${vela.gradient};`}>
+      <div class="p-img-num">{vela.num}</div>
+    </div>
+    <div class="p-info">
+      <div class="p-eyebrow"><a href="/shop" class="p-back">← VELAS</a></div>
+      <h1 class="p-name">{vela.name}</h1>
+      <div class="p-fragrance">{frag.name.toUpperCase()} · {frag.family}</div>
+      <p class="p-line">{vela.line}</p>
+      <div class="p-price">{vela.price}</div>
+      <a href={vela.stripeUrl} class="p-buy">COMPRAR →</a>
+      <div class="p-ship">FEITA À MÃO, POR ENCOMENDA · ENVIO EM 5 A 8 DIAS ÚTEIS</div>
+    </div>
+  </div>
+</section>
+
+{vela.inspiracao && (
+  <section class="p-section">
+    <div class="p-section-eyebrow">INSPIRAÇÃO</div>
+    <p class="p-section-text">{vela.inspiracao}</p>
+  </section>
+)}
+
+{(vela.fragranciaQuote || vela.fragranciaTexto) && (
+  <section class="p-section p-section-alt">
+    <div class="p-section-eyebrow">A FRAGRÂNCIA</div>
+    {vela.fragranciaQuote && <p class="p-quote">“{vela.fragranciaQuote}”</p>}
+    {vela.fragranciaTexto && <p class="p-section-text">{vela.fragranciaTexto}</p>}
+    {vela.notas && (
+      <div class="p-notas">
+        <div class="p-nota">
+          <span class="p-nota-label">FAMÍLIA OLFATIVA</span>
+          <span class="p-nota-val">{vela.notas.familia}</span>
+        </div>
+        <div class="p-nota">
+          <span class="p-nota-label">TOPO</span>
+          <span class="p-nota-val">{vela.notas.topo}</span>
+        </div>
+        <div class="p-nota">
+          <span class="p-nota-label">CORAÇÃO</span>
+          <span class="p-nota-val">{vela.notas.coracao}</span>
+        </div>
+        <div class="p-nota">
+          <span class="p-nota-label">BASE</span>
+          <span class="p-nota-val">{vela.notas.base}</span>
+        </div>
+      </div>
+    )}
+  </section>
+)}
+
+{(vela.detalhesIntro || vela.detalhes.length > 0) && (
+  <section class="p-section">
+    <div class="p-section-eyebrow">OUTROS DETALHES IMPORTANTES</div>
+    {vela.detalhesIntro && <p class="p-section-text">{vela.detalhesIntro}</p>}
+    {vela.detalhes.length > 0 && (
+      <ul class="p-detalhes">
+        {vela.detalhes.map((d) => <li>{d}</li>)}
+      </ul>
+    )}
+  </section>
+)}
+
+<!-- OUTRAS PEÇAS -->
+<section class="p-outras">
+  <div class="p-section-eyebrow">OUTRAS PEÇAS</div>
+  <div class="p-outras-grid">
+    {outras.map((o) => {
+      const of_ = fotoDe(o.slug);
+      return (
+        <a href={`/product/${o.slug}`} class="p-outra">
+          <div class="p-outra-img" style={of_ ? `background: url('${of_}') center/cover;` : `background: ${o.gradient};`}></div>
+          <div class="p-outra-name">{o.name}</div>
+          <div class="p-outra-price">{o.price}</div>
+        </a>
+      );
+    })}
+  </div>
+</section>
+
+</Base>
+
+<style>
+.p-top {
+  padding: 72px 40px 40px;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+.p-top-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.p-img {
+  aspect-ratio: 4/5;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 24px;
+}
+.p-img-num {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  color: rgba(244,241,234,0.8);
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  font-weight: 400;
+}
+.p-eyebrow { margin-bottom: 28px; }
+.p-back {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  color: #8F9491;
+  font-weight: 400;
+  transition: color 0.3s;
+}
+.p-back:hover { color: #1B2A39; }
+.p-name {
+  font-size: 56px;
+  color: #1B2A39;
+  font-weight: 200;
+  letter-spacing: -0.8px;
+  margin: 0 0 12px;
+  line-height: 1;
+}
+.p-fragrance {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  color: #A85738;
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+.p-line {
+  font-size: 17px;
+  color: #5F5E5A;
+  font-style: italic;
+  line-height: 1.65;
+  margin: 0 0 32px;
+  font-weight: 200;
+}
+.p-price {
+  font-size: 26px;
+  color: #1B2A39;
+  font-weight: 300;
+  margin-bottom: 28px;
+}
+.p-buy {
+  display: inline-block;
+  padding: 16px 40px;
+  background: #1B2A39;
+  color: #F4F1EA;
+  border: 0.5px solid #1B2A39;
+  font-size: 11px;
+  letter-spacing: 3px;
+  font-weight: 400;
+  transition: all 0.3s;
+}
+.p-buy:hover {
+  background: transparent;
+  color: #1B2A39;
+}
+.p-ship {
+  margin-top: 24px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #8F9491;
+  font-weight: 300;
+}
+
+.p-section {
+  padding: 72px 40px;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+.p-section-alt {
+  max-width: 100%;
+  background: #FAF7F0;
+}
+.p-section-alt > * {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.p-section-eyebrow {
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: #A85738;
+  margin-bottom: 28px;
+  font-weight: 400;
+}
+.p-section-text {
+  font-size: 15px;
+  color: #2A2A2A;
+  line-height: 1.85;
+  font-weight: 200;
+  margin: 0 0 24px;
+  text-align: left;
+}
+.p-quote {
+  font-size: 24px;
+  color: #1B2A39;
+  font-style: italic;
+  font-weight: 200;
+  line-height: 1.5;
+  letter-spacing: -0.3px;
+  margin: 0 0 32px;
+}
+.p-notas {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  text-align: left;
+}
+.p-nota {
+  border-top: 0.5px solid #D8D2C8;
+  padding-top: 14px;
+}
+.p-nota-label {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  color: #8F9491;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+.p-nota-val {
+  font-size: 13px;
+  color: #1B2A39;
+  font-weight: 200;
+  line-height: 1.5;
+}
+.p-detalhes {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  text-align: left;
+}
+.p-detalhes li {
+  font-size: 14px;
+  color: #5F5E5A;
+  line-height: 1.6;
+  padding: 14px 0;
+  border-top: 0.5px solid #E3DFD5;
+  font-weight: 200;
+}
+.p-detalhes li::before {
+  content: "—";
+  color: #A85738;
+  margin-right: 12px;
+}
+
+.p-outras {
+  padding: 72px 40px 120px;
+  max-width: 1120px;
+  margin: 0 auto;
+  text-align: center;
+}
+.p-outras-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.p-outra { display: block; }
+.p-outra-img {
+  aspect-ratio: 4/5;
+  margin-bottom: 16px;
+  transition: opacity 0.3s;
+}
+.p-outra:hover .p-outra-img { opacity: 0.85; }
+.p-outra-name {
+  font-size: 18px;
+  color: #1B2A39;
+  font-weight: 200;
+}
+.p-outra-price {
+  font-size: 13px;
+  color: #8F9491;
+  font-weight: 300;
+}
+
+@media (max-width: 760px) {
+  .p-top { padding: 40px 24px 24px; }
+  .p-top-inner { grid-template-columns: 1fr; gap: 32px; }
+  .p-name { font-size: 40px; }
+  .p-section { padding: 48px 24px; }
+  .p-notas { grid-template-columns: 1fr 1fr; }
+  .p-outras { padding: 48px 24px 80px; }
+  .p-outras-grid { grid-template-columns: 1fr; }
+}
+</style>

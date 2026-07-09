@@ -1,0 +1,224 @@
+---
+const { title = 'Malumi — Cuidado em forma de objeto.', description = 'Atelier de design sensorial em Lisboa. Velas autorais feitas à mão em Portugal.' } = Astro.props;
+---
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300&display=swap" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="header-logo" aria-label="Malumi — página inicial">
+        <img src="/img/malumi-wordmark-blue.png" alt="malumi" />
+      </a>
+      <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+      <nav class="main-nav" aria-label="Menu principal">
+        <a href="/#atelier">atelier</a>
+        <a href="/shop">velas</a>
+        <a href="/#edicao">edição privada</a>
+        <a href="/by">malumi by</a>
+        <a href="/#conversar">conversar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer class="site-footer" id="conversar">
+    <div class="footer-inner">
+      <div class="footer-col footer-brand">
+        <img src="/img/malumi-wordmark-sand.png" alt="malumi" class="footer-logo" />
+        <p class="footer-tagline">Arte, aroma e intenção.<br />Feito à mão em Portugal.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Catálogo</h3>
+        <a href="/shop#primavera-em-sintra">Primavera em Sintra</a>
+        <a href="/shop#golden-oud">Golden Oud</a>
+        <a href="/shop#serenata-di-fiori">Serenata di Fiori</a>
+        <a href="/#edicao">Edição privada</a>
+      </div>
+      <div class="footer-col">
+        <h3>Malumi by</h3>
+        <a href="/by">Hotelaria boutique</a>
+        <a href="/by">Design de interiores</a>
+        <a href="/by">Arquitectura</a>
+        <a href="/by">Imobiliária premium</a>
+      </div>
+      <div class="footer-col">
+        <h3>Conversar</h3>
+        <a href="mailto:studio@malumi.pt">studio@malumi.pt</a>
+        <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+        <span class="footer-plain">Atelier · Lisboa</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 MALUMI · TODOS OS DIREITOS RESERVADOS</span>
+      <span>POLÍTICA DE PRIVACIDADE · TERMOS</span>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('.main-nav');
+    toggle?.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+    nav?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      nav.classList.remove('open');
+      toggle?.setAttribute('aria-expanded', 'false');
+    }));
+  </script>
+</body>
+</html>
+
+<style is:global>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  section[id] { scroll-margin-top: 90px; }
+  body {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 200;
+    color: #2A2A2A;
+    background: #F4F1EA;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+    margin: 0;
+    padding: 0;
+  }
+  strong, b { font-weight: 400; }
+  a { text-decoration: none; }
+  img { max-width: 100%; }
+
+  /* HEADER */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #F4F1EA;
+    border-bottom: 0.5px solid #E3DFD5;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 22px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-logo img { height: 30px; width: auto; display: block; }
+  .main-nav { display: flex; gap: 36px; }
+  .main-nav a {
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 2.5px;
+    text-transform: lowercase;
+    color: #1B2A39;
+    transition: color 0.3s;
+  }
+  .main-nav a:hover { color: #5F5E5A; }
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+  }
+  .menu-toggle span {
+    display: block;
+    width: 22px;
+    height: 1px;
+    background: #1B2A39;
+    margin: 6px 0;
+  }
+
+  /* FOOTER */
+  .site-footer {
+    background: #1B2A39;
+    color: #D8D2C8;
+  }
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 40px 64px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 48px;
+  }
+  .footer-logo { height: 26px; width: auto; margin-bottom: 20px; }
+  .footer-tagline {
+    font-style: italic;
+    font-weight: 200;
+    font-size: 14px;
+    color: #D8D2C8;
+    margin: 0;
+    line-height: 1.7;
+  }
+  .footer-col h3 {
+    color: #F4F1EA;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0 0 20px;
+  }
+  .footer-col a, .footer-plain {
+    display: block;
+    color: #8F9491;
+    font-size: 13px;
+    font-weight: 200;
+    margin-bottom: 12px;
+    transition: color 0.3s;
+  }
+  .footer-col a:hover { color: #F4F1EA; }
+  .footer-bottom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 40px 32px;
+    border-top: 0.5px solid #2F3F4F;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    color: #6B7B86;
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: 300;
+  }
+
+  @media (max-width: 760px) {
+    .header-inner { padding: 16px 24px; }
+    .menu-toggle { display: block; }
+    .main-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #F4F1EA;
+      border-bottom: 0.5px solid #E3DFD5;
+      flex-direction: column;
+      gap: 0;
+      padding: 8px 24px 16px;
+    }
+    .main-nav.open { display: flex; }
+    .main-nav a { padding: 12px 0; }
+    .footer-inner { grid-template-columns: 1fr; gap: 40px; padding: 56px 24px 40px; }
+    .footer-bottom { padding: 20px 24px 28px; }
+  }
+</style>
