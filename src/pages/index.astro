@@ -108,12 +108,17 @@ import { velas, fragrances, fotoDe } from '../data/velas.js';
 
 <!-- EDIÇÃO PRIVADA -->
 <section class="m-edicao" id="edicao">
-  <div class="m-edicao-inner">
-    <div class="m-edicao-num">07 · EDIÇÃO PRIVADA</div>
-    <h2 class="m-edicao-title">Uma peça co-assinada <em>com a sua história.</em></h2>
-    <p class="m-edicao-text">Para quem procura uma peça única. Conte-nos uma cor, um momento, uma memória. Lemos, interpretamos e criamos uma vela só sua — numerada, em série de um.</p>
-    <div class="m-edicao-note">POR ENCOMENDA · PRODUÇÃO LIMITADA · 4 A 6 SEMANAS</div>
-    <a href="mailto:studio@malumi.pt?subject=Edição Privada Malumi" class="m-edicao-cta">INICIAR UMA CONVERSA →</a>
+  <div class="m-edicao-grid">
+    <div class="m-edicao-img">
+      <div class="m-edicao-img-label">SÉRIE DE UM · PEÇA CO-ASSINADA</div>
+    </div>
+    <div class="m-edicao-inner">
+      <div class="m-edicao-num">07 · EDIÇÃO PRIVADA</div>
+      <h2 class="m-edicao-title">Uma peça co-assinada <em>com a sua história.</em></h2>
+      <p class="m-edicao-text">Para quem procura uma peça única. Conte-nos uma cor, um momento, uma memória. Lemos, interpretamos e criamos uma vela só sua — numerada, em série de um.</p>
+      <div class="m-edicao-note">POR ENCOMENDA · PRODUÇÃO LIMITADA · 4 A 6 SEMANAS</div>
+      <a href="mailto:studio@malumi.pt?subject=Edição Privada Malumi" class="m-edicao-cta">INICIAR UMA CONVERSA →</a>
+    </div>
   </div>
 </section>
 
@@ -171,7 +176,7 @@ import { velas, fragrances, fotoDe } from '../data/velas.js';
 .m-hero {
   padding: 96px 40px 0;
   background: #F4F1EA;
-  max-width: 1200px;
+  max-width: 1020px;
   margin: 0 auto;
 }
 .m-hero-inner {
@@ -232,7 +237,9 @@ import { velas, fragrances, fotoDe } from '../data/velas.js';
 }
 .m-hero-img {
   aspect-ratio: 4/5;
-  max-height: 480px;
+  max-height: 380px;
+  max-width: 304px;
+  justify-self: end;
   background: url('/img/hero-atelier.jpg') center/cover;
 }
 
@@ -254,10 +261,9 @@ import { velas, fragrances, fotoDe } from '../data/velas.js';
   font-weight: 400;
   opacity: 0.9;
 }
-/* === Substituir por fotografias: background: url('/img/materia.jpg') center/cover; === */
-.m-band-materia    { background: linear-gradient(160deg, #8F9491 0%, #5F5E5A 100%); }
-.m-band-fragrancia { background: linear-gradient(160deg, #A85738 0%, #7A3E26 100%); }
-.m-band-presenca   { background: linear-gradient(160deg, #24374A 0%, #131E2A 100%); }
+.m-band-materia    { background: url('/img/materia.jpg') center/cover; }
+.m-band-fragrancia { background: url('/img/fragrancia.jpg') center/cover; }
+.m-band-presenca   { background: url('/img/presenca.jpg') center/cover; }
 
 /* FRASE-ÂNCORA */
 .m-anchor {
@@ -288,7 +294,7 @@ import { velas, fragrances, fotoDe } from '../data/velas.js';
 /* SECÇÕES */
 .m-section {
   padding: 96px 40px;
-  max-width: 1200px;
+  max-width: 960px;
   margin: 0 auto;
 }
 .m-section-eyebrow {
@@ -350,11 +356,11 @@ import { velas, fragrances, fotoDe } from '../data/velas.js';
 .m-pair {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
+  gap: 56px;
 }
 .m-card { background: #F4F1EA; }
 .m-card-img {
-  aspect-ratio: 4/5;
+  aspect-ratio: 1/1;
   margin-bottom: 24px;
   position: relative;
   overflow: hidden;
@@ -423,18 +429,17 @@ import { velas, fragrances, fotoDe } from '../data/velas.js';
   background: #FAF7F0;
 }
 .m-atelier-inner {
-  max-width: 1120px;
+  max-width: 960px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 72px;
   align-items: center;
 }
 .m-atelier-img {
-  aspect-ratio: 4/5;
-  background: linear-gradient(160deg, #8F9491 0%, #5F5E5A 100%);
+  aspect-ratio: 1/1;
+  background: url('/img/atelier.jpg') center/cover;
   position: relative;
-  /* Substituir por: background: url('/img/atelier.jpg') center/cover; */
 }
 .m-atelier-img-label {
   position: absolute;
@@ -510,14 +515,39 @@ import { velas, fragrances, fotoDe } from '../data/velas.js';
 .m-edicao {
   background: #F4F1EA;
   padding: 96px 40px;
-  text-align: center;
+}
+.m-edicao-grid {
+  max-width: 960px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 0;
+  align-items: stretch;
+}
+.m-edicao-img {
+  background: url('/img/edicao-privada.jpg') center/cover;
+  position: relative;
+  min-height: 420px;
+}
+.m-edicao-img-label {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: #F4F1EA;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  font-weight: 400;
+  text-shadow: 0 0 14px rgba(0,0,0,0.4);
 }
 .m-edicao-inner {
-  max-width: 720px;
-  margin: 0 auto;
   border: 0.5px solid #D8D2C8;
-  padding: 80px 64px;
+  border-left: none;
+  padding: 64px 56px;
   background: #FAF7F0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .m-edicao-num {
   font-size: 10px;
@@ -669,11 +699,11 @@ import { velas, fragrances, fotoDe } from '../data/velas.js';
   margin-bottom: 32px;
 }
 .m-insta-grid {
-  max-width: 1120px;
+  max-width: 840px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
+  gap: 10px;
 }
 .m-insta-item {
   aspect-ratio: 1;
@@ -694,7 +724,9 @@ import { velas, fragrances, fotoDe } from '../data/velas.js';
   .m-pair, .m-atelier-inner, .m-by-inner { grid-template-columns: 1fr; gap: 32px; }
   .m-atelier-values { grid-template-columns: 1fr; }
   .m-section, .m-atelier, .m-edicao, .m-by { padding: 64px 24px; }
-  .m-edicao-inner { padding: 56px 32px; }
+  .m-edicao-grid { grid-template-columns: 1fr; }
+  .m-edicao-img { min-height: 300px; }
+  .m-edicao-inner { padding: 48px 28px; border-left: 0.5px solid #D8D2C8; border-top: none; }
   .m-insta { padding: 48px 24px; }
   .m-insta-grid { grid-template-columns: repeat(3, 1fr); }
 }
