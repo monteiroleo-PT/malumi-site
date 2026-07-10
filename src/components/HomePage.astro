@@ -23,9 +23,14 @@ const L = (p) => link(lang, p);
 
   <!-- BANDA MATÉRIA / FRAGRÂNCIA / PRESENÇA -->
   <div class="m-band">
-    <div class="m-band-item m-band-materia"><span>{t.banda[0]}</span></div>
-    <div class="m-band-item m-band-fragrancia"><span>{t.banda[1]}</span></div>
-    <div class="m-band-item m-band-presenca"><span>{t.banda[2]}</span></div>
+    {['materia', 'fragrancia', 'presenca'].map((slug, i) => (
+      <div class={`m-band-item m-band-${slug}`}>
+        <div class="m-band-caption">
+          <span class="m-band-label">{t.banda[i][0]}</span>
+          <span class="m-band-quote">{t.banda[i][1]}</span>
+        </div>
+      </div>
+    ))}
   </div>
 </section>
 
@@ -232,18 +237,40 @@ const L = (p) => link(lang, p);
   display: flex;
   align-items: flex-end;
   padding: 20px 24px;
+  position: relative;
 }
-.m-band-item span {
+.m-band-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(14,22,31,0.45) 0%, rgba(14,22,31,0) 45%);
+  pointer-events: none;
+}
+.m-band-caption {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.m-band-label {
   color: #F4F1EA;
   font-size: 10px;
   letter-spacing: 3px;
   font-weight: 400;
-  opacity: 0.9;
+  opacity: 0.95;
 }
-/* === Quando houver fotografias: background: url('/img/materia.jpg') center/cover; === */
-.m-band-materia    { background: linear-gradient(160deg, #8F9491 0%, #5F5E5A 100%); }
-.m-band-fragrancia { background: linear-gradient(160deg, #A85738 0%, #7A3E26 100%); }
-.m-band-presenca   { background: linear-gradient(160deg, #24374A 0%, #131E2A 100%); }
+.m-band-quote {
+  color: #F4F1EA;
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 200;
+  opacity: 0.85;
+  letter-spacing: 0.2px;
+}
+.m-band-materia    { background: url('/img/materia.jpg') center/cover; }
+.m-band-fragrancia { background: url('/img/fragrancia.jpg') center/cover; }
+.m-band-presenca   { background: url('/img/presenca.jpg') center/cover; }
 
 /* FRASE-ÂNCORA */
 .m-anchor {
