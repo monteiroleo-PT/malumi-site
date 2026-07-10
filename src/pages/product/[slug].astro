@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { velas, fragrances, fotoDe } from '../../data/velas.js';
+import { velas, fragrances, fotoDe, galeriaDe } from '../../data/velas.js';
 
 export function getStaticPaths() {
   return velas.map((v) => ({ params: { slug: v.slug } }));
@@ -9,7 +9,7 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 const vela = velas.find((v) => v.slug === slug);
 const frag = fragrances.find((f) => f.slug === vela.fragrance);
-const foto = fotoDe(vela.slug);
+const galeria = galeriaDe(vela.slug);
 const outras = velas.filter((v) => v.slug !== slug).slice(0, 3);
 ---
 <Base title={`${vela.name} — Malumi`} description={vela.line}>
@@ -17,9 +17,36 @@ const outras = velas.filter((v) => v.slug !== slug).slice(0, 3);
 <!-- TOPO DO PRODUTO -->
 <section class="p-top">
   <div class="p-top-inner">
-    <div class="p-img" style={foto ? `background: url('${foto}') center/cover;` : `background: ${vela.gradient};`}>
-      <div class="p-img-num">{vela.num}</div>
-    </div>
+    {galeria.length > 0 ? (
+      <div class="p-gallery">
+        <div class="p-gallery-main">
+          {galeria.map((src, i) => (
+            <img src={src} alt={`${vela.name} — fotografia ${i + 1}`} class={i === 0 ? 'g-slide active' : 'g-slide'} loading={i === 0 ? 'eager' : 'lazy'} />
+          ))}
+          <div class="p-img-num">{vela.num}</div>
+          {galeria.length > 1 && (
+            <>
+              <button class="g-arrow g-prev" aria-label="Fotografia anterior">←</button>
+              <button class="g-arrow g-next" aria-label="Fotografia seguinte">→</button>
+              <div class="g-counter"><span class="g-idx">01</span> / {String(galeria.length).padStart(2, '0')}</div>
+            </>
+          )}
+        </div>
+        {galeria.length > 1 && (
+          <div class="g-thumbs">
+            {galeria.map((src, i) => (
+              <button class={i === 0 ? 'g-thumb active' : 'g-thumb'} data-i={i} aria-label={`Ver fotografia ${i + 1}`}>
+                <img src={src} alt="" loading="lazy" />
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    ) : (
+      <div class="p-img" style={`background: ${vela.gradient};`}>
+        <div class="p-img-num">{vela.num}</div>
+      </div>
+    )}
     <div class="p-info">
       <div class="p-eyebrow"><a href="/shop" class="p-back">← VELAS</a></div>
       <h1 class="p-name">{vela.name}</h1>
@@ -98,7 +125,126 @@ const outras = velas.filter((v) => v.slug !== slug).slice(0, 3);
 
 </Base>
 
+<script>
+  const gal = document.querySelector('.p-gallery');
+  if (gal) {
+    const slides = [...gal.querySelectorAll('.g-slide')];
+    const thumbs = [...gal.querySelectorAll('.g-thumb')];
+    const idxEl = gal.querySelector('.g-idx');
+    let cur = 0;
+
+    function go(i) {
+      cur = (i + slides.length) % slides.length;
+      slides.forEach((s, n) => s.classList.toggle('active', n === cur));
+      thumbs.forEach((t, n) => t.classList.toggle('active', n === cur));
+      if (idxEl) idxEl.textContent = String(cur + 1).padStart(2, '0');
+      thumbs[cur]?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+    }
+
+    gal.querySelector('.g-prev')?.addEventListener('click', () => go(cur - 1));
+    gal.querySelector('.g-next')?.addEventListener('click', () => go(cur + 1));
+    thumbs.forEach((t) => t.addEventListener('click', () => go(+t.dataset.i)));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') go(cur - 1);
+      if (e.key === 'ArrowRight') go(cur + 1);
+    });
+
+    // swipe em mobile
+    const main = gal.querySelector('.p-gallery-main');
+    let x0 = null;
+    main.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    main.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
+      x0 = null;
+    }, { passive: true });
+  }
+</script>
+
 <style>
+/* GALERIA */
+.p-gallery-main {
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  background: #E9E4DA;
+}
+.g-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.015);
+  transition: opacity 0.55s ease, transform 0.9s ease;
+}
+.g-slide.active {
+  opacity: 1;
+  transform: scale(1);
+}
+.g-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: rgba(244,241,234,0.82);
+  color: #1B2A39;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-family: 'Outfit', sans-serif;
+  opacity: 0;
+}
+.p-gallery-main:hover .g-arrow { opacity: 1; }
+.g-arrow:hover { background: #1B2A39; color: #F4F1EA; }
+.g-prev { left: 12px; }
+.g-next { right: 12px; }
+.g-counter {
+  position: absolute;
+  bottom: 16px;
+  right: 20px;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  color: rgba(244,241,234,0.9);
+  font-weight: 400;
+  text-shadow: 0 0 12px rgba(0,0,0,0.35);
+}
+.g-thumbs {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.g-thumbs::-webkit-scrollbar { display: none; }
+.g-thumb {
+  flex: 0 0 64px;
+  aspect-ratio: 1;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  opacity: 0.45;
+  transition: opacity 0.3s;
+  background: none;
+}
+.g-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.g-thumb.active, .g-thumb:hover { opacity: 1; }
+.g-thumb.active { outline: 1px solid #1B2A39; outline-offset: 2px; }
+@media (hover: none) {
+  .g-arrow { opacity: 1; background: rgba(244,241,234,0.6); }
+}
+
 .p-top {
   padding: 72px 40px 40px;
   max-width: 1120px;
