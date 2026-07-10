@@ -2,13 +2,13 @@
 import Base from '../layouts/Base.astro';
 import { velas, fragrances, fotoDe } from '../data/velas.js';
 ---
-<Base title="Malumi — Cuidado em forma de objeto." description="Atelier de design sensorial em Lisboa. Velas autorais feitas à mão em Portugal. Cada peça é única — como o gesto que a criou.">
+<Base title="Malumi — Cuidado em forma de objeto." description="Atelier de design sensorial em Sintra. Velas autorais feitas à mão em Portugal. Cada peça é única — como o gesto que a criou.">
 
 <!-- HERO -->
 <section class="m-hero">
   <div class="m-hero-inner">
     <div>
-      <div class="m-hero-eyebrow"><span class="m-hero-eyebrow-mark"></span>ATELIER DE DESIGN SENSORIAL · LISBOA</div>
+      <div class="m-hero-eyebrow"><span class="m-hero-eyebrow-mark"></span>ATELIER DE DESIGN SENSORIAL · SINTRA</div>
       <h1 class="m-hero-title">Cuidado<br />em forma de<br /><em>objeto.</em></h1>
       <p class="m-hero-sub">Velas autorais feitas à mão em Portugal. Cada peça é única — como o gesto que a criou.</p>
       <a href="/#atelier" class="m-hero-cta">CONHECER O ATELIER →</a>
@@ -70,7 +70,7 @@ import { velas, fragrances, fotoDe } from '../data/velas.js';
 <section class="m-atelier" id="atelier">
   <div class="m-atelier-inner">
     <div class="m-atelier-img">
-      <div class="m-atelier-img-label">O ATELIER · LISBOA</div>
+      <div class="m-atelier-img-label">O ATELIER · SINTRA</div>
     </div>
     <div>
       <div class="m-atelier-eyebrow">O ATELIER</div>
@@ -236,9 +236,9 @@ import { velas, fragrances, fotoDe } from '../data/velas.js';
   color: #F4F1EA;
 }
 .m-hero-img {
+  width: 100%;
+  max-width: 320px;
   aspect-ratio: 4/5;
-  max-height: 380px;
-  max-width: 304px;
   justify-self: end;
   background: url('/img/hero-atelier.jpg') center/cover;
 }
@@ -261,9 +261,10 @@ import { velas, fragrances, fotoDe } from '../data/velas.js';
   font-weight: 400;
   opacity: 0.9;
 }
-.m-band-materia    { background: url('/img/materia.jpg') center/cover; }
-.m-band-fragrancia { background: url('/img/fragrancia.jpg') center/cover; }
-.m-band-presenca   { background: url('/img/presenca.jpg') center/cover; }
+/* === Quando houver fotografias: background: url('/img/materia.jpg') center/cover; === */
+.m-band-materia    { background: linear-gradient(160deg, #8F9491 0%, #5F5E5A 100%); }
+.m-band-fragrancia { background: linear-gradient(160deg, #A85738 0%, #7A3E26 100%); }
+.m-band-presenca   { background: linear-gradient(160deg, #24374A 0%, #131E2A 100%); }
 
 /* FRASE-ÂNCORA */
 .m-anchor {

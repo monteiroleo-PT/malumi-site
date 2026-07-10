@@ -1,5 +1,5 @@
 ---
-const { title = 'Malumi — Cuidado em forma de objeto.', description = 'Atelier de design sensorial em Lisboa. Velas autorais feitas à mão em Portugal.' } = Astro.props;
+const { title = 'Malumi — Cuidado em forma de objeto.', description = 'Atelier de design sensorial em Sintra. Velas autorais feitas à mão em Portugal.' } = Astro.props;
 ---
 <!doctype html>
 <html lang="pt-PT">
@@ -44,6 +44,7 @@ const { title = 'Malumi — Cuidado em forma de objeto.', description = 'Atelier
       <div class="footer-col footer-brand">
         <img src="/img/malumi-wordmark-sand.png" alt="malumi" class="footer-logo" />
         <p class="footer-tagline">Arte, aroma e intenção.<br />Feito à mão em Portugal.</p>
+        <p class="footer-slogan">HANDMADE IN SINTRA</p>
       </div>
       <div class="footer-col">
         <h3>Catálogo</h3>
@@ -63,7 +64,7 @@ const { title = 'Malumi — Cuidado em forma de objeto.', description = 'Atelier
         <h3>Conversar</h3>
         <a href="mailto:studio@malumi.pt">studio@malumi.pt</a>
         <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
-        <span class="footer-plain">Atelier · Lisboa</span>
+        <span class="footer-plain">Atelier · Sintra</span>
       </div>
     </div>
     <div class="footer-bottom">
@@ -168,6 +169,13 @@ const { title = 'Malumi — Cuidado em forma de objeto.', description = 'Atelier
     color: #D8D2C8;
     margin: 0;
     line-height: 1.7;
+  }
+  .footer-slogan {
+    margin: 18px 0 0;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: #8F9491;
+    font-weight: 400;
   }
   .footer-col h3 {
     color: #F4F1EA;
