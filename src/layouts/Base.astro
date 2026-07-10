@@ -1,8 +1,18 @@
 ---
-const { title = 'Malumi — Cuidado em forma de objeto.', description = 'Atelier de design sensorial em Sintra. Velas autorais feitas à mão em Portugal.' } = Astro.props;
+import { textos, link } from '../i18n/textos.js';
+
+const { lang = 'pt', title = 'Malumi — Cuidado em forma de objeto.', description = '' } = Astro.props;
+const t = textos[lang === 'en' ? 'en' : 'pt'];
+const L = (p) => link(lang, p);
+
+// caminho equivalente no outro idioma (para o interruptor PT/EN e hreflang)
+const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const ptPath = pathname.replace(/^\/en(\/|$)/, '/').replace(/\/{2,}/g, '/') || '/';
+const enPath = ptPath === '/' ? '/en/' : '/en' + ptPath;
+const altHref = lang === 'en' ? ptPath : enPath;
 ---
 <!doctype html>
-<html lang="pt-PT">
+<html lang={t.lang}>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,6 +21,9 @@ const { title = 'Malumi — Cuidado em forma de objeto.', description = 'Atelier
   <link rel="icon" href="/favicon.ico" sizes="32x32" />
   <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="alternate" hreflang="pt-PT" href={`https://malumi.pt${ptPath}`} />
+  <link rel="alternate" hreflang="en" href={`https://malumi.pt${enPath}`} />
+  <link rel="alternate" hreflang="x-default" href={`https://malumi.pt${ptPath}`} />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300&display=swap" />
@@ -19,18 +32,23 @@ const { title = 'Malumi — Cuidado em forma de objeto.', description = 'Atelier
 
   <header class="site-header">
     <div class="header-inner">
-      <a href="/" class="header-logo" aria-label="Malumi — página inicial">
+      <a href={L('/')} class="header-logo" aria-label="Malumi">
         <img src="/img/malumi-wordmark-blue.png" alt="malumi" />
       </a>
-      <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">
+      <button class="menu-toggle" aria-label="Menu" aria-expanded="false">
         <span></span><span></span>
       </button>
-      <nav class="main-nav" aria-label="Menu principal">
-        <a href="/#atelier">atelier</a>
-        <a href="/shop">velas</a>
-        <a href="/#edicao">edição privada</a>
-        <a href="/by">malumi by</a>
-        <a href="/#conversar">conversar</a>
+      <nav class="main-nav" aria-label="Menu">
+        <a href={L('/#atelier')}>{t.nav.atelier}</a>
+        <a href={L('/shop')}>{t.nav.velas}</a>
+        <a href={L('/#edicao')}>{t.nav.edicao}</a>
+        <a href={L('/by')}>{t.nav.by}</a>
+        <a href={L('/#conversar')}>{t.nav.conversar}</a>
+        <span class="lang-switch">
+          <a href={lang === 'en' ? altHref : pathname} class={lang !== 'en' ? 'on' : ''}>PT</a>
+          <span class="lang-sep">/</span>
+          <a href={lang === 'en' ? pathname : altHref} class={lang === 'en' ? 'on' : ''}>EN</a>
+        </span>
       </nav>
     </div>
   </header>
@@ -43,33 +61,30 @@ const { title = 'Malumi — Cuidado em forma de objeto.', description = 'Atelier
     <div class="footer-inner">
       <div class="footer-col footer-brand">
         <img src="/img/malumi-wordmark-sand.png" alt="malumi" class="footer-logo" />
-        <p class="footer-tagline">Arte, aroma e intenção.<br />Feito à mão em Portugal.</p>
-        <p class="footer-slogan">HANDMADE IN SINTRA</p>
+        <p class="footer-tagline" set:html={t.footer.tagline} />
+        <p class="footer-slogan">{t.footer.slogan}</p>
       </div>
       <div class="footer-col">
-        <h3>Catálogo</h3>
-        <a href="/shop#primavera-em-sintra">Primavera em Sintra</a>
-        <a href="/shop#golden-oud">Golden Oud</a>
-        <a href="/shop#serenata-di-fiori">Serenata di Fiori</a>
-        <a href="/#edicao">Edição privada</a>
+        <h3>{t.footer.catalogo}</h3>
+        <a href={L('/shop#primavera-em-sintra')}>Primavera em Sintra</a>
+        <a href={L('/shop#golden-oud')}>Golden Oud</a>
+        <a href={L('/shop#serenata-di-fiori')}>Serenata di Fiori</a>
+        <a href={L('/#edicao')}>{t.footer.edicaoPrivada}</a>
       </div>
       <div class="footer-col">
-        <h3>Malumi by</h3>
-        <a href="/by">Hotelaria boutique</a>
-        <a href="/by">Design de interiores</a>
-        <a href="/by">Arquitectura</a>
-        <a href="/by">Imobiliária premium</a>
+        <h3>{t.footer.by}</h3>
+        {t.footer.byLinks.map((label) => <a href={L('/by')}>{label}</a>)}
       </div>
       <div class="footer-col">
-        <h3>Conversar</h3>
+        <h3>{t.footer.conversar}</h3>
         <a href="mailto:studio@malumi.pt">studio@malumi.pt</a>
         <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
-        <span class="footer-plain">Atelier · Sintra</span>
+        <span class="footer-plain">{t.footer.atelierLocal}</span>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 MALUMI · TODOS OS DIREITOS RESERVADOS</span>
-      <span>POLÍTICA DE PRIVACIDADE · TERMOS</span>
+      <span>{t.footer.copyright}</span>
+      <span>{t.footer.legal}</span>
     </div>
   </footer>
 
@@ -123,7 +138,7 @@ const { title = 'Malumi — Cuidado em forma de objeto.', description = 'Atelier
     justify-content: space-between;
   }
   .header-logo img { height: 30px; width: auto; display: block; }
-  .main-nav { display: flex; gap: 36px; }
+  .main-nav { display: flex; gap: 36px; align-items: center; }
   .main-nav a {
     font-size: 11px;
     font-weight: 300;
@@ -133,6 +148,24 @@ const { title = 'Malumi — Cuidado em forma de objeto.', description = 'Atelier
     transition: color 0.3s;
   }
   .main-nav a:hover { color: #5F5E5A; }
+  .lang-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 8px;
+    padding-left: 24px;
+    border-left: 0.5px solid #D8D2C8;
+  }
+  .lang-switch a {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #8F9491;
+    font-weight: 300;
+  }
+  .lang-switch a.on { color: #1B2A39; font-weight: 400; }
+  .lang-switch a:hover { color: #1B2A39; }
+  .lang-sep { color: #D8D2C8; font-size: 10px; }
   .menu-toggle {
     display: none;
     background: none;
@@ -223,9 +256,11 @@ const { title = 'Malumi — Cuidado em forma de objeto.', description = 'Atelier
       flex-direction: column;
       gap: 0;
       padding: 8px 24px 16px;
+      align-items: flex-start;
     }
     .main-nav.open { display: flex; }
     .main-nav a { padding: 12px 0; }
+    .lang-switch { border-left: none; padding-left: 0; margin: 8px 0 0; }
     .footer-inner { grid-template-columns: 1fr; gap: 40px; padding: 56px 24px 40px; }
     .footer-bottom { padding: 20px 24px 28px; }
   }

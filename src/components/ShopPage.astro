@@ -1,0 +1,257 @@
+---
+import Base from '../layouts/Base.astro';
+import { velas, fragrances, fotoDe, velaLoc, fragLoc } from '../data/velas.js';
+import { textos, link } from '../i18n/textos.js';
+
+const { lang = 'pt' } = Astro.props;
+const t = textos[lang === 'en' ? 'en' : 'pt'].shop;
+const L = (p) => link(lang, p);
+---
+<Base lang={lang} title={t.metaTitle} description={t.metaDesc}>
+
+<section class="s-intro">
+  <div class="s-intro-eyebrow"><span class="s-intro-eyebrow-mark"></span>{t.eyebrow}</div>
+  <h1 class="s-intro-title" set:html={t.titulo} />
+  <p class="s-intro-sub">{t.sub}</p>
+</section>
+
+<section class="s-catalog">
+  {fragrances.map((f0) => {
+    const f = fragLoc(f0, lang);
+    return (
+      <div class="s-fragrance-group" id={f.slug}>
+        <div class="s-fragrance-header">
+          <h2 class="s-fragrance-name"><em>{f.name}</em></h2>
+          <span class="s-fragrance-family">{f.family}</span>
+        </div>
+        <div class="s-pair">
+          {velas.filter((v) => v.fragrance === f.slug).map((v0) => {
+            const v = velaLoc(v0, lang);
+            const foto = fotoDe(v.slug);
+            return (
+              <div class="s-card" id={v.slug}>
+                <a href={L(`/product/${v.slug}`)} class="s-card-img" style={foto ? `background: url('${foto}') center/cover;` : `background: ${v.gradient};`}>
+                  <div class="s-card-label-num">{v.num}</div>
+                </a>
+                <h3 class="s-card-name"><a href={L(`/product/${v.slug}`)}>{v.name}</a></h3>
+                <div class="s-card-fragrance">{f.name.toUpperCase()}</div>
+                <p class="s-card-line">{v.line}</p>
+                <div class="s-card-meta">
+                  <span class="s-card-price">{v.price}</span>
+                  <span class="s-card-actions">
+                    <a href={L(`/product/${v.slug}`)} class="s-card-link">{t.verPeca}</a>
+                    <a href={v.stripeUrl} class="s-buy">{t.comprar}</a>
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  })}
+</section>
+
+<section class="s-note">
+  <p class="s-note-text">{t.nota}</p>
+  <p class="s-note-contact">{t.notaContacto} <a href="mailto:studio@malumi.pt">studio@malumi.pt</a></p>
+</section>
+
+</Base>
+
+<style>
+.s-intro {
+  padding: 100px 40px 40px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.s-intro-eyebrow {
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: #8F9491;
+  margin-bottom: 32px;
+  font-weight: 300;
+}
+.s-intro-eyebrow-mark {
+  display: inline-block;
+  width: 24px;
+  height: 0.5px;
+  background: #8F9491;
+  vertical-align: middle;
+  margin-right: 16px;
+  opacity: 0.6;
+}
+.s-intro-title {
+  font-size: 56px;
+  color: #1B2A39;
+  font-weight: 200;
+  letter-spacing: -0.8px;
+  margin: 0 0 20px;
+  line-height: 1.1;
+}
+.s-intro-title :global(em) {
+  font-style: italic;
+  color: #5F5E5A;
+}
+.s-intro-sub {
+  font-size: 16px;
+  color: #6B6B6B;
+  font-style: italic;
+  max-width: 560px;
+  line-height: 1.7;
+  margin: 0;
+  font-weight: 200;
+}
+
+.s-catalog {
+  padding: 56px 40px 40px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.s-fragrance-group { margin-bottom: 96px; }
+.s-fragrance-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 0.5px solid #D8D2C8;
+  margin-bottom: 40px;
+}
+.s-fragrance-name {
+  font-size: 28px;
+  color: #1B2A39;
+  font-weight: 200;
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+.s-fragrance-name em { font-style: italic; }
+.s-fragrance-family {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #A85738;
+  font-weight: 400;
+}
+.s-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+}
+.s-card { background: #F4F1EA; }
+.s-card-img {
+  aspect-ratio: 1/1;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  padding: 24px;
+  transition: opacity 0.3s;
+}
+.s-card-img:hover { opacity: 0.9; }
+.s-card-label-num {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  color: rgba(244,241,234,0.8);
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  font-weight: 400;
+}
+.s-card-name {
+  font-size: 28px;
+  font-weight: 200;
+  margin: 0 0 6px;
+  letter-spacing: -0.3px;
+}
+.s-card-name a { color: #1B2A39; }
+.s-card-fragrance {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  color: #A85738;
+  margin-bottom: 16px;
+  font-weight: 400;
+}
+.s-card-line {
+  font-size: 15px;
+  color: #5F5E5A;
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0 0 24px;
+  min-height: 48px;
+  font-weight: 200;
+}
+.s-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 0.5px solid #D8D2C8;
+  padding-top: 16px;
+}
+.s-card-price {
+  font-weight: 300;
+  font-size: 18px;
+  color: #1B2A39;
+}
+.s-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.s-card-link {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  color: #1B2A39;
+  font-weight: 400;
+}
+.s-card-link:hover { text-decoration: underline; }
+.s-buy {
+  display: inline-block;
+  padding: 11px 22px;
+  background: transparent;
+  color: #1B2A39;
+  border: 0.5px solid #1B2A39;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  font-weight: 400;
+  transition: all 0.3s;
+}
+.s-buy:hover {
+  background: #1B2A39;
+  color: #F4F1EA;
+}
+
+.s-note {
+  padding: 40px 40px 120px;
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: center;
+  border-top: 0.5px solid #E3DFD5;
+}
+.s-note-text {
+  font-size: 14px;
+  color: #6B6B6B;
+  font-style: italic;
+  font-weight: 200;
+  margin: 40px 0 8px;
+}
+.s-note-contact {
+  font-size: 13px;
+  color: #8F9491;
+  font-weight: 200;
+  margin: 0;
+}
+.s-note-contact a {
+  color: #1B2A39;
+  font-weight: 300;
+}
+.s-note-contact a:hover { text-decoration: underline; }
+
+@media (max-width: 760px) {
+  .s-intro { padding: 64px 24px 24px; }
+  .s-intro-title { font-size: 36px; }
+  .s-catalog { padding: 32px 24px; }
+  .s-pair { grid-template-columns: 1fr; gap: 32px; }
+  .s-fragrance-group { margin-bottom: 64px; }
+  .s-note { padding: 24px 24px 80px; }
+}
+</style>

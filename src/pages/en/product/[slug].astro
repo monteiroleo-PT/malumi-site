@@ -1,0 +1,11 @@
+---
+import ProductPage from '../../../components/ProductPage.astro';
+import { velas } from '../../../data/velas.js';
+
+export function getStaticPaths() {
+  return velas.map((v) => ({ params: { slug: v.slug } }));
+}
+
+const { slug } = Astro.params;
+---
+<ProductPage lang="en" slug={slug} />

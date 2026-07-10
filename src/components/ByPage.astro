@@ -1,0 +1,564 @@
+---
+import Base from '../layouts/Base.astro';
+import { textos } from '../i18n/textos.js';
+
+const { lang = 'pt' } = Astro.props;
+const t = textos[lang === 'en' ? 'en' : 'pt'].by;
+---
+<Base lang={lang} title={t.metaTitle} description={t.metaDesc}>
+
+<!-- HERO -->
+<section class="by-hero">
+  <div class="by-hero-inner">
+    <div>
+      <div class="by-hero-eyebrow"><span class="by-hero-eyebrow-mark"></span>{t.eyebrow}</div>
+      <h1 class="by-hero-title" set:html={t.titulo} />
+      <p class="by-hero-sub">{t.sub}</p>
+    </div>
+    <div class="by-hero-right">
+      {t.heroRight.map((p) => <p set:html={p} />)}
+    </div>
+  </div>
+</section>
+
+<!-- FRASE-ÂNCORA -->
+<section class="by-anchor">
+  <div class="by-anchor-inner">
+    <div class="by-anchor-eyebrow">{t.ancoraEyebrow}</div>
+    <p class="by-anchor-text" set:html={t.ancora} />
+    <span class="by-rule"></span>
+  </div>
+</section>
+
+<!-- MÉTODO -->
+<section class="by-method-section">
+  <div class="by-method-inner">
+    <div class="by-section-eyebrow">{t.metodoEyebrow}</div>
+    <h2 class="by-section-title" set:html={t.metodoTitulo} />
+    <p class="by-section-sub">{t.metodoSub}</p>
+
+    <div class="by-method-grid">
+      {t.metodo.map(([num, titulo, texto]) => (
+        <div class="by-method-step">
+          <span class="by-method-num">{num}</span>
+          <h4>{titulo}</h4>
+          <p>{texto}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- MERCADOS -->
+<section class="by-markets">
+  <div class="by-section-eyebrow">{t.mercadosEyebrow}</div>
+  <h2 class="by-section-title" set:html={t.mercadosTitulo} />
+  <p class="by-section-sub">{t.mercadosSub}</p>
+
+  <div class="by-markets-grid">
+    {t.mercados.map(([num, glyph, titulo, sub, texto, linha]) => (
+      <div class="by-market">
+        <span class="by-market-num">{num}</span>
+        <div class="by-market-glyph">{glyph}</div>
+        <h4>{titulo}</h4>
+        <div class="by-market-sub">{sub}</div>
+        <p>{texto}</p>
+        <p class="by-market-line">{linha}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
+<!-- DIFERENÇA -->
+<section class="by-difference">
+  <div class="by-difference-inner">
+    <div class="by-difference-eyebrow">{t.difEyebrow}</div>
+    <h2 class="by-difference-title" set:html={t.difTitulo} />
+    <div class="by-difference-grid">
+      <div class="by-difference-col">
+        <div class="by-difference-col-label no">{t.difNaoLabel}</div>
+        <ul>
+          {t.difNao.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+      <div class="by-difference-col">
+        <div class="by-difference-col-label yes">{t.difSimLabel}</div>
+        <ul>
+          {t.difSim.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARCERIAS -->
+<section class="by-cases">
+  <div class="by-section-eyebrow">{t.casosEyebrow}</div>
+  <h2 class="by-section-title" set:html={t.casosTitulo} />
+  <p class="by-section-sub">{t.casosSub}</p>
+
+  <div class="by-cases-grid">
+    {[1, 2, 3].map(() => (
+      <div class="by-case-box by-case-box-empty">
+        <div class="by-case-box-text">{t.casoBox}<em>{t.casoBoxSub}</em></div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="by-contact">
+  <div class="by-contact-inner">
+    <div class="by-contact-eyebrow">{t.contactoEyebrow}</div>
+    <h2 class="by-contact-title" set:html={t.contactoTitulo} />
+    <p class="by-contact-text">{t.contactoTexto}</p>
+    <p class="by-contact-email">studio@malumi.pt</p>
+    <p class="by-contact-note">{t.contactoNote}</p>
+    <a href={`mailto:studio@malumi.pt?subject=${encodeURIComponent(t.contactoMailSubject)}`} class="by-contact-cta">{t.contactoCta}</a>
+  </div>
+</section>
+
+</Base>
+
+<style>
+/* HERO */
+.by-hero {
+  background: #1B2A39;
+  color: #F4F1EA;
+  padding: 140px 40px 100px;
+}
+.by-hero-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 80px;
+  align-items: end;
+}
+.by-hero-eyebrow {
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: #D8D2C8;
+  margin-bottom: 32px;
+  font-weight: 300;
+}
+.by-hero-eyebrow-mark {
+  display: inline-block;
+  width: 24px;
+  height: 0.5px;
+  background: #D8D2C8;
+  vertical-align: middle;
+  margin-right: 16px;
+  opacity: 0.6;
+}
+.by-hero-title {
+  font-size: 78px;
+  line-height: 1;
+  color: #F4F1EA;
+  font-weight: 200;
+  letter-spacing: -1.5px;
+  margin: 0 0 32px;
+}
+.by-hero-title :global(em) {
+  font-style: italic;
+  color: #D8D2C8;
+  font-weight: 200;
+}
+.by-hero-sub {
+  font-size: 18px;
+  color: #D8D2C8;
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0;
+  font-weight: 200;
+  max-width: 480px;
+}
+.by-hero-right {
+  font-size: 13px;
+  color: #8F9491;
+  line-height: 1.8;
+  font-weight: 200;
+  padding-bottom: 8px;
+}
+.by-hero-right p { margin: 0 0 16px; }
+.by-hero-right :global(strong) { color: #F4F1EA; font-weight: 400; }
+
+/* FRASE-ÂNCORA */
+.by-anchor {
+  background: #F4F1EA;
+  padding: 96px 40px;
+  text-align: center;
+}
+.by-anchor-inner {
+  max-width: 780px;
+  margin: 0 auto;
+}
+.by-anchor-eyebrow {
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: #A85738;
+  margin-bottom: 32px;
+  font-weight: 400;
+}
+.by-anchor-text {
+  font-size: 30px;
+  line-height: 1.4;
+  color: #1B2A39;
+  font-weight: 200;
+  letter-spacing: -0.3px;
+  margin: 0;
+  font-style: italic;
+}
+.by-anchor-text :global(em) {
+  font-style: normal;
+  color: #5F5E5A;
+}
+.by-rule {
+  display: block;
+  width: 48px;
+  height: 0.5px;
+  background: #1B2A39;
+  margin: 32px auto 0;
+  opacity: 0.3;
+}
+
+/* SECÇÕES */
+.by-section-eyebrow {
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: #8F9491;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 300;
+}
+.by-section-title {
+  font-size: 48px;
+  color: #1B2A39;
+  font-weight: 200;
+  letter-spacing: -0.8px;
+  text-align: center;
+  margin: 0 0 16px;
+  line-height: 1.1;
+}
+.by-section-title :global(em) {
+  font-style: italic;
+  color: #5F5E5A;
+}
+.by-section-sub {
+  font-size: 15px;
+  color: #6B6B6B;
+  font-style: italic;
+  text-align: center;
+  max-width: 580px;
+  margin: 0 auto 72px;
+  line-height: 1.7;
+  font-weight: 200;
+}
+
+/* MÉTODO */
+.by-method-section {
+  background: #F4F1EA;
+  padding: 120px 40px;
+}
+.by-method-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+}
+.by-method-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  margin-top: 56px;
+  border-top: 0.5px solid #D8D2C8;
+}
+.by-method-step {
+  padding: 48px 28px 36px;
+  border-right: 0.5px solid #D8D2C8;
+  background: #F4F1EA;
+}
+.by-method-step:last-child { border-right: none; }
+.by-method-num {
+  font-size: 36px;
+  color: #1B2A39;
+  font-weight: 200;
+  margin-bottom: 20px;
+  letter-spacing: -1.5px;
+  display: block;
+  line-height: 1;
+}
+.by-method-step h4 {
+  font-size: 13px;
+  color: #1B2A39;
+  font-weight: 400;
+  letter-spacing: 2px;
+  margin: 0 0 14px;
+}
+.by-method-step p {
+  font-size: 12.5px;
+  color: #5F5E5A;
+  font-style: italic;
+  line-height: 1.65;
+  margin: 0;
+  font-weight: 200;
+}
+
+/* MERCADOS */
+.by-markets {
+  padding: 120px 40px;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+.by-markets-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 24px;
+}
+.by-market {
+  background: #FAF7F0;
+  padding: 48px 40px;
+  border: 0.5px solid #E3DFD5;
+  position: relative;
+  overflow: hidden;
+}
+.by-market-num {
+  position: absolute;
+  top: 32px;
+  right: 32px;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  color: #8F9491;
+  font-weight: 400;
+}
+.by-market-glyph {
+  font-size: 32px;
+  color: #1B2A39;
+  margin-bottom: 24px;
+  font-weight: 200;
+  line-height: 1;
+}
+.by-market h4 {
+  font-size: 22px;
+  color: #1B2A39;
+  font-weight: 300;
+  letter-spacing: -0.2px;
+  margin: 0 0 12px;
+}
+.by-market-sub {
+  font-size: 10px;
+  color: #A85738;
+  letter-spacing: 2.5px;
+  margin-bottom: 20px;
+  font-weight: 400;
+}
+.by-market p {
+  font-size: 14px;
+  color: #5F5E5A;
+  line-height: 1.75;
+  margin: 0 0 16px;
+  font-weight: 200;
+}
+.by-market-line {
+  font-size: 14px;
+  color: #1B2A39 !important;
+  font-style: italic;
+  margin-top: 24px !important;
+  padding-top: 20px;
+  border-top: 0.5px solid #D8D2C8;
+  font-weight: 200;
+}
+
+/* DIFERENÇA */
+.by-difference {
+  background: #1B2A39;
+  color: #F4F1EA;
+  padding: 140px 40px;
+  text-align: center;
+}
+.by-difference-inner {
+  max-width: 880px;
+  margin: 0 auto;
+}
+.by-difference-eyebrow {
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: #D8D2C8;
+  margin-bottom: 32px;
+  font-weight: 300;
+}
+.by-difference-title {
+  font-size: 48px;
+  color: #F4F1EA;
+  font-weight: 200;
+  letter-spacing: -0.8px;
+  line-height: 1.2;
+  margin: 0 0 64px;
+}
+.by-difference-title :global(em) {
+  font-style: italic;
+  color: #D8D2C8;
+}
+.by-difference-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  text-align: left;
+  margin-top: 48px;
+}
+.by-difference-col-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  margin-bottom: 24px;
+  font-weight: 400;
+}
+.by-difference-col-label.no { color: #A85738; }
+.by-difference-col-label.yes { color: #D8D2C8; }
+.by-difference-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.by-difference-col li {
+  font-size: 14px;
+  color: #D8D2C8;
+  line-height: 1.6;
+  padding: 16px 0;
+  border-top: 0.5px solid #2F3F4F;
+  font-weight: 200;
+}
+.by-difference-col li:last-child { padding-bottom: 0; }
+.by-difference-col li::before {
+  content: "—";
+  color: #8F9491;
+  margin-right: 12px;
+}
+
+/* PARCERIAS */
+.by-cases {
+  padding: 120px 40px;
+  max-width: 1040px;
+  margin: 0 auto;
+  background: #F4F1EA;
+}
+.by-cases-grid {
+  margin-top: 48px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.by-case-box {
+  aspect-ratio: 1;
+  background: #FAF7F0;
+  border: 0.5px solid #E3DFD5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px;
+}
+.by-case-box-empty {
+  background: transparent;
+  border: 0.5px dashed #C8C2B5;
+}
+.by-case-box-text {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #8F9491;
+  font-weight: 300;
+}
+.by-case-box-text em {
+  display: block;
+  font-style: italic;
+  letter-spacing: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: 8px;
+}
+
+/* CONTACTO */
+.by-contact {
+  background: #FAF7F0;
+  padding: 140px 40px;
+}
+.by-contact-inner {
+  max-width: 780px;
+  margin: 0 auto;
+  text-align: center;
+}
+.by-contact-eyebrow {
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: #8F9491;
+  margin-bottom: 32px;
+  font-weight: 300;
+}
+.by-contact-title {
+  font-size: 56px;
+  color: #1B2A39;
+  font-weight: 200;
+  letter-spacing: -0.8px;
+  margin: 0 0 32px;
+  line-height: 1.1;
+}
+.by-contact-title :global(em) {
+  font-style: italic;
+  color: #5F5E5A;
+}
+.by-contact-text {
+  font-size: 17px;
+  color: #5F5E5A;
+  line-height: 1.7;
+  margin: 0 0 48px;
+  font-weight: 200;
+}
+.by-contact-email {
+  font-size: 26px;
+  color: #1B2A39;
+  letter-spacing: 0.5px;
+  margin: 0 0 16px;
+  font-weight: 300;
+}
+.by-contact-note {
+  font-size: 10px;
+  color: #8F9491;
+  letter-spacing: 2.5px;
+  font-weight: 300;
+}
+.by-contact-cta {
+  display: inline-block;
+  margin-top: 48px;
+  padding: 16px 36px;
+  background: transparent;
+  color: #1B2A39;
+  border: 0.5px solid #1B2A39;
+  font-size: 11px;
+  letter-spacing: 3px;
+  font-weight: 400;
+  transition: all 0.3s;
+}
+.by-contact-cta:hover {
+  background: #1B2A39;
+  color: #F4F1EA;
+}
+
+/* RESPONSIVE */
+@media (max-width: 760px) {
+  .by-hero-title { font-size: 46px; }
+  .by-section-title, .by-difference-title, .by-contact-title { font-size: 32px; }
+  .by-anchor-text { font-size: 22px; }
+  .by-hero-inner, .by-difference-grid { grid-template-columns: 1fr; gap: 32px; }
+  .by-method-grid {
+    grid-template-columns: 1fr;
+    border-left: 0.5px solid #D8D2C8;
+  }
+  .by-method-step {
+    border-right: none;
+    border-bottom: 0.5px solid #D8D2C8;
+  }
+  .by-markets-grid, .by-cases-grid { grid-template-columns: 1fr; }
+  .by-hero { padding: 80px 24px 60px; }
+  .by-method-section, .by-markets, .by-difference, .by-cases, .by-contact {
+    padding: 64px 24px;
+  }
+}
+</style>
