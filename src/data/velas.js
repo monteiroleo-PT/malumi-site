@@ -1,9 +1,9 @@
 // ============================================================
-// FONTE ÚNICA DE DADOS DAS VELAS — PT + EN
+// FONTE ÚNICA DE DADOS DAS VELAS - PT + EN
 // - stripeUrl: substituir cada "SUBSTITUIR_STRIPE_..." pelo
 //   Payment Link do Stripe (https://buy.stripe.com/...)
 // - Fotografias: public/img/velas/<slug>.jpg (capa) e
-//   <slug>-1.jpg, <slug>-2.jpg... (galeria) — detecção automática.
+//   <slug>-1.jpg, <slug>-2.jpg... (galeria) - detecção automática.
 // - EN é rascunho para revisão do Leo (chegará ficheiro PT/EN).
 // - Usar velaLoc(vela, lang) e fragLoc(frag, lang) nas páginas.
 // ============================================================
@@ -37,7 +37,7 @@ const FRAG = {
       fragranciaQuote:
         'Uma sinfonia olfativa que desperta os sentidos e celebra a frescura da natureza.',
       fragranciaTexto:
-        'Deixe-se abraçar pelo ar fresco de uma manhã de primavera na Serra de Sintra. As notas mais altas desta fragrância revelam a frescura vibrante do eucalipto e da hortelã, lembrando a brisa pura que serpenteia pelas copas das árvores. No seu coração, delicados toques de íris e ananás acrescentam uma luminosidade refinada, enquanto a base — um lenhoso de cedro com musgo húmido — evoca a profundidade serena de uma floresta banhada pela névoa dourada da manhã. Uma homenagem à beleza intocada da natureza.',
+        'Deixe-se abraçar pelo ar fresco de uma manhã de primavera na Serra de Sintra. As notas mais altas desta fragrância revelam a frescura vibrante do eucalipto e da hortelã, lembrando a brisa pura que serpenteia pelas copas das árvores. No seu coração, delicados toques de íris e ananás acrescentam uma luminosidade refinada, enquanto a base - um lenhoso de cedro com musgo húmido - evoca a profundidade serena de uma floresta banhada pela névoa dourada da manhã. Uma homenagem à beleza intocada da natureza.',
       notas: {
         familia: 'Aromático Amadeirado',
         topo: 'Eucalipto, Cânfora, Hortelã Fresca',
@@ -49,7 +49,7 @@ const FRAG = {
       fragranciaQuote:
         'An olfactory symphony that awakens the senses and celebrates the freshness of nature.',
       fragranciaTexto:
-        'Let yourself be embraced by the fresh air of a spring morning in the Sintra hills. The top notes of this fragrance reveal the vibrant freshness of eucalyptus and mint, recalling the pure breeze that winds through the treetops. At its heart, delicate touches of iris and pineapple add a refined luminosity, while the base — cedar wood over damp moss — evokes the serene depth of a forest bathed in golden morning mist. A tribute to the untouched beauty of nature.',
+        'Let yourself be embraced by the fresh air of a spring morning in the Sintra hills. The top notes of this fragrance reveal the vibrant freshness of eucalyptus and mint, recalling the pure breeze that winds through the treetops. At its heart, delicate touches of iris and pineapple add a refined luminosity, while the base - cedar wood over damp moss - evokes the serene depth of a forest bathed in golden morning mist. A tribute to the untouched beauty of nature.',
       notas: {
         familia: 'Woody Aromatic',
         topo: 'Eucalyptus, Camphor, Fresh Mint',
@@ -63,7 +63,7 @@ const FRAG = {
       fragranciaQuote:
         'Uma jornada sensorial de mistério, onde a tradição encontra a atemporalidade.',
       fragranciaTexto:
-        'Profunda, magnética e enigmática, esta fragrância é uma interpretação moderna da rica herança aromática do Médio Oriente. As notas mais altas, verdes, emergem como uma brisa fresca a varrer mercados movimentados, cheios de especiarias e sedas opulentas. No coração, uma fusão de couro, âmbar e almíscar cria uma textura quente e sedutora, que lembra lanternas douradas a brilhar na noite. A base — a sua verdadeira essência — é dominada por um oud nobre e um cedro imponente, deixando um rasto intenso: uma marca de memórias esculpidas no tempo.',
+        'Profunda, magnética e enigmática, esta fragrância é uma interpretação moderna da rica herança aromática do Médio Oriente. As notas mais altas, verdes, emergem como uma brisa fresca a varrer mercados movimentados, cheios de especiarias e sedas opulentas. No coração, uma fusão de couro, âmbar e almíscar cria uma textura quente e sedutora, que lembra lanternas douradas a brilhar na noite. A base - a sua verdadeira essência - é dominada por um oud nobre e um cedro imponente, deixando um rasto intenso: uma marca de memórias esculpidas no tempo.',
       notas: {
         familia: 'Oriental Amadeirado',
         topo: 'Notas Verdes',
@@ -75,7 +75,7 @@ const FRAG = {
       fragranciaQuote:
         'A sensory journey of mystery, where tradition meets timelessness.',
       fragranciaTexto:
-        'Deep, magnetic and enigmatic, this fragrance is a modern interpretation of the rich aromatic heritage of the Middle East. The green top notes emerge like a fresh breeze sweeping through bustling markets, full of spices and opulent silks. At the heart, a fusion of leather, amber and musk creates a warm, seductive texture, like golden lanterns glowing in the night. The base — its true essence — is ruled by a noble oud and an imposing cedar, leaving an intense trail: a mark of memories carved in time.',
+        'Deep, magnetic and enigmatic, this fragrance is a modern interpretation of the rich aromatic heritage of the Middle East. The green top notes emerge like a fresh breeze sweeping through bustling markets, full of spices and opulent silks. At the heart, a fusion of leather, amber and musk creates a warm, seductive texture, like golden lanterns glowing in the night. The base - its true essence - is ruled by a noble oud and an imposing cedar, leaving an intense trail: a mark of memories carved in time.',
       notas: {
         familia: 'Woody Oriental',
         topo: 'Green Notes',
@@ -114,11 +114,11 @@ const FRAG = {
 
 const DETALHES_PT = {
   detalhesIntro:
-    'Cada recipiente de eco-resina é meticulosamente feito à mão, um a um, em Sintra — Portugal. A cera é 100% natural e vegana. Sem parafina. Sem parabenos. Sem corantes. Apenas o nosso compromisso com a criação consciente, livre de crueldade, de queima limpa — amorosamente humanizada e acolhedora.',
+    'Cada recipiente de eco-resina é meticulosamente feito à mão, um a um, em Sintra - Portugal. A cera é 100% natural e vegana. Sem parafina. Sem parabenos. Sem corantes. Apenas o nosso compromisso com a criação consciente, livre de crueldade, de queima limpa - amorosamente humanizada e acolhedora.',
   detalhes: [
     'Frasco de eco-resina, 400 g',
     'Cera de soja, 300 g',
-    'Pavios de algodão e linho, sem chumbo — garantem uma queima segura e limpa',
+    'Pavios de algodão e linho, sem chumbo - garantem uma queima segura e limpa',
     'Aproximadamente 40 h de queima',
     'Fragrâncias da mais alta qualidade, criadas por perfumarias de renome da Europa',
     'Peso total aproximado: 700 g',
@@ -129,11 +129,11 @@ const DETALHES_PT = {
 
 const DETALHES_EN = {
   detalhesIntro:
-    'Each eco-resin vessel is meticulously handmade, one by one, in Sintra — Portugal. The wax is 100% natural and vegan. No paraffin. No parabens. No dyes. Only our commitment to conscious, cruelty-free creation and a clean burn — lovingly human and welcoming.',
+    'Each eco-resin vessel is meticulously handmade, one by one, in Sintra - Portugal. The wax is 100% natural and vegan. No paraffin. No parabens. No dyes. Only our commitment to conscious, cruelty-free creation and a clean burn - lovingly human and welcoming.',
   detalhes: [
     'Eco-resin vessel, 400 g',
     'Soy wax, 300 g',
-    'Cotton and linen wicks, lead-free — for a safe, clean burn',
+    'Cotton and linen wicks, lead-free - for a safe, clean burn',
     'Approximately 40 h of burn time',
     'Fragrances of the highest quality, created by renowned European perfume houses',
     'Total weight: approximately 700 g',
@@ -247,19 +247,19 @@ export const velas = [
     gradient: 'radial-gradient(ellipse at 45% 65%, #C8B8D8 0%, #9F8AB8 40%, #6F5A88 100%)',
     stripeUrl: 'SUBSTITUIR_STRIPE_VIOLET',
     pt: {
-      line: 'A violeta entre rosa e baunilha — a doçura que não se impõe.',
+      line: 'A violeta entre rosa e baunilha - a doçura que não se impõe.',
       inspiracao:
-        'A vela Violet guarda o entardecer nos campos floridos do sul de França — a hora em que a luz abranda e tudo pede pausa. Entre a rosa e a baunilha, uma doçura que não se impõe: fica, discreta, a fazer companhia.',
+        'A vela Violet guarda o entardecer nos campos floridos do sul de França - a hora em que a luz abranda e tudo pede pausa. Entre a rosa e a baunilha, uma doçura que não se impõe: fica, discreta, a fazer companhia.',
     },
     en: {
-      line: 'The violet between rose and vanilla — a sweetness that never imposes itself.',
+      line: 'The violet between rose and vanilla - a sweetness that never imposes itself.',
       inspiracao:
-        'The Violet candle holds the dusk of the flowering fields of southern France — the hour when the light softens and everything asks for pause. Between rose and vanilla, a sweetness that never imposes itself: it stays, discreet, keeping you company.',
+        'The Violet candle holds the dusk of the flowering fields of southern France - the hour when the light softens and everything asks for pause. Between rose and vanilla, a sweetness that never imposes itself: it stays, discreet, keeping you company.',
     },
   },
 ];
 
-// 7.ª peça — exemplo de Edição Privada.
+// 7.ª peça - exemplo de Edição Privada.
 // Foto integrada na secção Edição Privada da homepage; falta o texto.
 
 /** Vela localizada: junta os campos do idioma + fragrância + detalhes. */
@@ -278,7 +278,7 @@ export function fragLoc(frag, lang) {
 import fs from 'node:fs';
 import path from 'node:path';
 
-/** Foto de capa: public/img/velas/<slug>.jpg|png — devolve o URL ou null. */
+/** Foto de capa: public/img/velas/<slug>.jpg|png - devolve o URL ou null. */
 export function fotoDe(slug) {
   for (const ext of ['jpg', 'jpeg', 'png', 'webp']) {
     const p = path.resolve(`public/img/velas/${slug}.${ext}`);

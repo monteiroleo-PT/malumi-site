@@ -12,7 +12,7 @@ const frag = fragLoc(fragrances.find((f) => f.slug === vela.fragrance), lang);
 const galeria = galeriaDe(vela.slug);
 const outras = velas.filter((v) => v.slug !== slug).slice(0, 3).map((v) => velaLoc(v, lang));
 ---
-<Base lang={lang} title={`${vela.name} — Malumi`} description={vela.line}>
+<Base lang={lang} title={`${vela.name} - Malumi`} description={vela.line}>
 
 <!-- TOPO DO PRODUTO -->
 <section class="p-top">
@@ -21,7 +21,7 @@ const outras = velas.filter((v) => v.slug !== slug).slice(0, 3).map((v) => velaL
       <div class="p-gallery">
         <div class="p-gallery-main">
           {galeria.map((src, i) => (
-            <img src={src} alt={`${vela.name} — ${t.fotoAlt} ${i + 1}`} class={i === 0 ? 'g-slide active' : 'g-slide'} loading={i === 0 ? 'eager' : 'lazy'} />
+            <img src={src} alt={`${vela.name} - ${t.fotoAlt} ${i + 1}`} class={i === 0 ? 'g-slide active' : 'g-slide'} loading={i === 0 ? 'eager' : 'lazy'} />
           ))}
           <div class="p-img-num">{vela.num}</div>
           {galeria.length > 1 && (
@@ -411,7 +411,7 @@ const outras = velas.filter((v) => v.slug !== slug).slice(0, 3).map((v) => velaL
   font-weight: 200;
 }
 .p-detalhes li::before {
-  content: "—";
+  content: "-";
   color: #A85738;
   margin-right: 12px;
 }
