@@ -1,7 +1,7 @@
 // ============================================================
 // FONTE ÚNICA DE DADOS DAS VELAS - PT + EN
-// - stripeUrl: substituir cada "SUBSTITUIR_STRIPE_..." pelo
-//   Payment Link do Stripe (https://buy.stripe.com/...)
+// - stripeUrl: Payment Links do Stripe, activos desde 14 Jul 2026
+//   (gerem-se no dashboard Stripe > Payment Links)
 // - Fotografias: public/img/velas/<slug>.jpg (capa) e
 //   <slug>-1.jpg, <slug>-2.jpg... (galeria) - detecção automática.
 // - EN é rascunho para revisão do Leo (chegará ficheiro PT/EN).
@@ -150,7 +150,7 @@ export const velas = [
     price: '€ 68',
     fragrance: 'primavera-em-sintra',
     gradient: 'radial-gradient(ellipse at 45% 65%, #9FA478 0%, #7C8160 40%, #5C6342 100%)',
-    stripeUrl: 'SUBSTITUIR_STRIPE_OLIVE',
+    stripeUrl: 'https://buy.stripe.com/5kQ00kb6HfPA1bu4xa3VC05',
     pt: {
       line: 'O verde-oliva que respira sob a copa dos pinheiros.',
       inspiracao:
@@ -169,7 +169,7 @@ export const velas = [
     price: '€ 68',
     fragrance: 'primavera-em-sintra',
     gradient: 'radial-gradient(ellipse at 45% 65%, #7B8995 0%, #5F6E7B 40%, #3F4E5B 100%)',
-    stripeUrl: 'SUBSTITUIR_STRIPE_NORDIC',
+    stripeUrl: 'https://buy.stripe.com/28E7sM7UvdHs3jC7Jm3VC04',
     pt: {
       line: 'A névoa nórdica que cobre a serra antes do mar.',
       inspiracao:
@@ -188,7 +188,7 @@ export const velas = [
     price: '€ 72',
     fragrance: 'golden-oud',
     gradient: 'radial-gradient(ellipse at 45% 65%, #3A3835 0%, #252321 40%, #0E0D0C 100%)',
-    stripeUrl: 'SUBSTITUIR_STRIPE_ONYX',
+    stripeUrl: 'https://buy.stripe.com/4gM7sM0s37j47zS3t63VC03',
     pt: {
       line: 'Mistério e sofisticação num só reflexo.',
       inspiracao:
@@ -207,7 +207,7 @@ export const velas = [
     price: '€ 72',
     fragrance: 'golden-oud',
     gradient: 'radial-gradient(ellipse at 45% 65%, #C16847 0%, #9D5132 40%, #723620 100%)',
-    stripeUrl: 'SUBSTITUIR_STRIPE_COTTO',
+    stripeUrl: 'https://buy.stripe.com/9B6fZigr1dHs2fyaVy3VC02',
     pt: {
       line: 'O terracota que nos liga à terra e à tradição.',
       inspiracao:
@@ -226,7 +226,7 @@ export const velas = [
     price: '€ 68',
     fragrance: 'serenata-di-fiori',
     gradient: 'radial-gradient(ellipse at 45% 65%, #E8B5A0 0%, #D08C72 40%, #A36148 100%)',
-    stripeUrl: 'SUBSTITUIR_STRIPE_AMBER',
+    stripeUrl: 'https://buy.stripe.com/fZu4gAa2D0UG8DW8Nq3VC01',
     pt: {
       line: 'O calor dourado que ilumina qualquer espaço.',
       inspiracao:
@@ -245,7 +245,7 @@ export const velas = [
     price: '€ 68',
     fragrance: 'serenata-di-fiori',
     gradient: 'radial-gradient(ellipse at 45% 65%, #C8B8D8 0%, #9F8AB8 40%, #6F5A88 100%)',
-    stripeUrl: 'SUBSTITUIR_STRIPE_VIOLET',
+    stripeUrl: 'https://buy.stripe.com/00weVeeiTeLwdYg8Nq3VC00',
     pt: {
       line: 'A violeta entre rosa e baunilha - a doçura que não se impõe.',
       inspiracao:
