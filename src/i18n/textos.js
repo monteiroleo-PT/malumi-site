@@ -31,8 +31,8 @@ export const textos = {
       metaTitle: 'Malumi - Cuidado em forma de objeto.',
       metaDesc: 'Atelier de design sensorial em Sintra. Velas autorais feitas à mão em Portugal. Cada peça é única - como o gesto que a criou.',
       eyebrow: 'ATELIER DE DESIGN SENSORIAL · SINTRA',
-      titulo: 'Cuidado<br />em forma de<br /><em>objeto.</em>',
-      sub: 'Velas autorais feitas à mão em Portugal. Cada peça é única - como o gesto que a criou.',
+      titulo: 'Cuidado<br />em forma<br />de <em>objeto.</em>',
+      sub: 'Velas autorais feitas à mão em Portugal.<br />Cada peça é única - como o gesto que a criou.',
       cta: 'CONHECER O ATELIER →',
       banda: [
         ['MATÉRIA', 'Aquilo que se toca'],
@@ -182,8 +182,8 @@ export const textos = {
       metaTitle: 'Malumi - Care in the form of an object.',
       metaDesc: 'Sensory design atelier in Sintra. Signature candles handmade in Portugal. Each piece is unique - like the gesture that made it.',
       eyebrow: 'SENSORY DESIGN ATELIER · SINTRA',
-      titulo: 'Care<br />in the form of<br /><em>an object.</em>',
-      sub: 'Signature candles handmade in Portugal. Each piece is unique - like the gesture that made it.',
+      titulo: 'Care<br />in the form<br />of <em>an object.</em>',
+      sub: 'Signature candles handmade in Portugal.<br />Each piece is unique - like the gesture that made it.',
       cta: 'MEET THE ATELIER →',
       banda: [
         ['MATTER', 'That which is touched'],
