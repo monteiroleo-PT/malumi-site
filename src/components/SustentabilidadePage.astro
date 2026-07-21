@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import { textos, link } from '../i18n/textos.js';
+
+const { lang = 'pt' } = Astro.props;
+const t = textos[lang === 'en' ? 'en' : 'pt'];
+const d = t.sustentabilidade;
+const L = (p) => link(lang, p);
+---
+<Base lang={lang} title={d.metaTitle} description={d.metaDesc}>
+
+<section class="sus-block">
+  <div class="sus-inner">
+    <div class="sus-img">
+      <img src="/img/sustentabilidade.jpg" alt="" loading="lazy" />
+    </div>
+    <div class="sus-text">
+      <div class="lg-eyebrow">{d.eyebrow}</div>
+      <h1 set:html={d.titulo} />
+      {d.paragrafos.map((p) => <p>{p}</p>)}
+      <a href={L('/cuidado-fragrancia')} class="sus-cta">{d.cta}</a>
+    </div>
+  </div>
+</section>
+
+</Base>
+
+<style>
+.sus-block {
+  background: #F4F1EA;
+  padding: 140px 40px 100px;
+}
+.sus-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 64px;
+  align-items: center;
+}
+.sus-img {
+  aspect-ratio: 1000/565;
+  overflow: hidden;
+}
+.sus-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.lg-eyebrow {
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: #A85738;
+  margin-bottom: 24px;
+  font-weight: 400;
+}
+.sus-text h1 {
+  font-size: 40px;
+  color: #1B2A39;
+  font-weight: 200;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+  margin: 0 0 28px;
+}
+.sus-text h1 :global(em) { font-style: italic; color: #5F5E5A; }
+.sus-text p {
+  font-size: 14.5px;
+  color: #5F5E5A;
+  line-height: 1.85;
+  font-weight: 200;
+  margin: 0 0 18px;
+}
+.sus-cta {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  color: #1B2A39;
+  font-weight: 400;
+  border-bottom: 0.5px solid #1B2A39;
+  padding-bottom: 3px;
+}
+.sus-cta:hover { color: #A85738; border-color: #A85738; }
+
+@media (max-width: 760px) {
+  .sus-block { padding: 88px 24px 64px; }
+  .sus-inner { grid-template-columns: 1fr; gap: 32px; }
+  .sus-text h1 { font-size: 28px; }
+}
+</style>

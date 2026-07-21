@@ -76,6 +76,14 @@ const altHref = lang === 'en' ? ptPath : enPath;
         {t.footer.byLinks.map((label) => <a href={L('/by')}>{label}</a>)}
       </div>
       <div class="footer-col">
+        <h3>{t.footer.apoioTitulo}</h3>
+        <a href={L('/faq')}>{t.footer.faq}</a>
+        <a href={L('/cuidado-fragrancia')}>{t.footer.cuidado}</a>
+        <a href={L('/pagamentos-envio')}>{t.footer.pagamentos}</a>
+        <a href={L('/devolucoes-reembolsos')}>{t.footer.devolucoes}</a>
+        <a href={L('/sustentabilidade')}>{t.footer.sustentabilidade}</a>
+      </div>
+      <div class="footer-col">
         <h3>{t.footer.conversar}</h3>
         <a href="mailto:studio@malumi.pt">studio@malumi.pt</a>
         <div class="footer-social">
@@ -100,7 +108,13 @@ const altHref = lang === 'en' ? ptPath : enPath;
     </div>
     <div class="footer-bottom">
       <span>{t.footer.copyright}</span>
-      <span>{t.footer.legal}</span>
+      <span class="footer-legal-links">
+        <a href={L('/politica-privacidade')}>{t.footer.privacidade}</a>
+        <span class="footer-legal-sep">·</span>
+        <a href={L('/termos-venda')}>{t.footer.termosVenda}</a>
+        <span class="footer-legal-sep">·</span>
+        <a href={L('/termos-condicoes')}>{t.footer.termosCondicoes}</a>
+      </span>
     </div>
   </footer>
 
@@ -203,12 +217,12 @@ const altHref = lang === 'en' ? ptPath : enPath;
     color: #D8D2C8;
   }
   .footer-inner {
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 0 auto;
     padding: 80px 40px 64px;
     display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr 1fr;
-    gap: 48px;
+    grid-template-columns: 1.2fr 0.8fr 0.8fr 1.1fr 0.9fr;
+    gap: 40px;
   }
   .footer-logo { height: 26px; width: auto; margin-bottom: 20px; }
   .footer-tagline {
@@ -257,7 +271,7 @@ const altHref = lang === 'en' ? ptPath : enPath;
   .footer-social a:hover { color: #F4F1EA; }
   .footer-social svg { width: 18px; height: 18px; display: block; }
   .footer-bottom {
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 0 auto;
     padding: 24px 40px 32px;
     border-top: 0.5px solid #2F3F4F;
@@ -270,6 +284,21 @@ const altHref = lang === 'en' ? ptPath : enPath;
     letter-spacing: 1px;
     font-weight: 300;
   }
+  .footer-legal-links {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .footer-legal-links a {
+    color: #6B7B86;
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: 300;
+    transition: color 0.3s;
+  }
+  .footer-legal-links a:hover { color: #F4F1EA; }
+  .footer-legal-sep { color: #3A4A57; }
 
   @media (max-width: 760px) {
     .header-inner { padding: 16px 24px; }

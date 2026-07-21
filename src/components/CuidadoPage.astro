@@ -1,0 +1,211 @@
+---
+import Base from '../layouts/Base.astro';
+import { textos } from '../i18n/textos.js';
+
+const { lang = 'pt' } = Astro.props;
+const t = textos[lang === 'en' ? 'en' : 'pt'];
+const d = t.cuidado;
+const imgCuidado = lang === 'en' ? '/img/cuidado/cuidado-en.jpg' : '/img/cuidado/cuidado-pt.jpg';
+---
+<Base lang={lang} title={d.metaTitle} description={d.metaDesc}>
+
+<section class="lg-hero">
+  <div class="lg-hero-inner">
+    <div class="lg-eyebrow">GUIA DE CUIDADO &amp; FRAGRÂNCIA</div>
+    <h1 class="lg-titulo">{lang === 'en' ? 'Care & Fragrance Guide' : 'Guia de Cuidado & Fragrância'}</h1>
+  </div>
+</section>
+
+<section class="care-block">
+  <div class="care-inner">
+    <div class="care-img">
+      <img src={imgCuidado} alt={d.tituloCuidado.replace(/<[^>]*>/g, '')} loading="lazy" />
+    </div>
+    <div class="care-text">
+      <div class="lg-eyebrow">{d.eyebrowCuidado}</div>
+      <h2 set:html={d.tituloCuidado} />
+      <p class="care-intro">{d.introCuidado}</p>
+      <ul>
+        {d.passos.map((p) => <li>{p}</li>)}
+      </ul>
+      <p class="care-aviso">{d.avisoCuidado}</p>
+    </div>
+  </div>
+</section>
+
+<section class="frag-block">
+  <div class="frag-inner">
+    <div class="lg-eyebrow" style="text-align:center;">{d.eyebrowFragrancia}</div>
+    <h2 class="frag-titulo" set:html={d.tituloFragrancia} />
+    <p class="frag-intro">{d.introFragrancia}</p>
+    <div class="frag-grid">
+      <div class="frag-img">
+        <img src="/img/cuidado/ingredientes.jpg" alt="" loading="lazy" />
+      </div>
+      <div class="frag-list">
+        {d.familias.map((f) => (
+          <div class="frag-item">
+            <h3>{f.nome}</h3>
+            <p class="frag-contem"><strong>{d.contemLabel}</strong> {f.contem}</p>
+            <p class="frag-ufi">{d.ufiLabel} {f.ufi}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+</Base>
+
+<style>
+.lg-hero {
+  background: #F4F1EA;
+  padding: 120px 40px 56px;
+  text-align: center;
+}
+.lg-hero-inner { max-width: 700px; margin: 0 auto; }
+.lg-eyebrow {
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: #A85738;
+  margin-bottom: 20px;
+  font-weight: 400;
+}
+.lg-titulo {
+  font-size: 40px;
+  color: #1B2A39;
+  font-weight: 200;
+  letter-spacing: -0.5px;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.care-block {
+  background: #FAF7F0;
+  padding: 64px 40px;
+}
+.care-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 64px;
+  align-items: center;
+}
+.care-img {
+  aspect-ratio: 978/1132;
+  overflow: hidden;
+}
+.care-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.care-text h2 {
+  font-size: 32px;
+  color: #1B2A39;
+  font-weight: 200;
+  letter-spacing: -0.4px;
+  margin: 0 0 20px;
+  line-height: 1.15;
+}
+.care-text h2 :global(em) { font-style: italic; color: #5F5E5A; }
+.care-intro {
+  font-size: 14.5px;
+  color: #5F5E5A;
+  font-weight: 200;
+  margin: 0 0 18px;
+}
+.care-text ul {
+  margin: 0 0 24px;
+  padding-left: 20px;
+}
+.care-text li {
+  font-size: 14.5px;
+  color: #2A2A2A;
+  line-height: 1.8;
+  font-weight: 200;
+  margin-bottom: 10px;
+}
+.care-aviso {
+  font-size: 13px;
+  color: #8F9491;
+  font-style: italic;
+  line-height: 1.7;
+  font-weight: 200;
+  margin: 0;
+  padding-top: 18px;
+  border-top: 0.5px solid #D8D2C8;
+}
+
+.frag-block {
+  background: #F4F1EA;
+  padding: 96px 40px;
+}
+.frag-inner { max-width: 1000px; margin: 0 auto; }
+.frag-titulo {
+  font-size: 36px;
+  color: #1B2A39;
+  font-weight: 200;
+  letter-spacing: -0.4px;
+  text-align: center;
+  margin: 0 0 20px;
+}
+.frag-intro {
+  font-size: 14.5px;
+  color: #5F5E5A;
+  line-height: 1.8;
+  font-weight: 200;
+  text-align: center;
+  max-width: 620px;
+  margin: 0 auto 56px;
+}
+.frag-grid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 56px;
+  align-items: start;
+}
+.frag-img {
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  position: sticky;
+  top: 100px;
+}
+.frag-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.frag-item {
+  padding: 24px 0;
+  border-bottom: 0.5px solid #D8D2C8;
+}
+.frag-item:first-child { padding-top: 0; }
+.frag-item:last-child { border-bottom: none; }
+.frag-item h3 {
+  font-size: 17px;
+  color: #1B2A39;
+  font-weight: 400;
+  margin: 0 0 10px;
+}
+.frag-contem {
+  font-size: 12.5px;
+  color: #6B6B6B;
+  line-height: 1.7;
+  font-weight: 200;
+  margin: 0 0 8px;
+}
+.frag-contem strong { color: #2A2A2A; font-weight: 400; }
+.frag-ufi {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: #8F9491;
+  font-weight: 400;
+  margin: 0;
+}
+
+@media (max-width: 760px) {
+  .lg-hero { padding: 72px 24px 40px; }
+  .lg-titulo { font-size: 28px; }
+  .care-block { padding: 48px 24px; }
+  .care-inner { grid-template-columns: 1fr; gap: 32px; }
+  .care-text h2 { font-size: 26px; }
+  .frag-block { padding: 56px 24px; }
+  .frag-titulo { font-size: 28px; }
+  .frag-grid { grid-template-columns: 1fr; gap: 32px; }
+  .frag-img { position: static; aspect-ratio: 4/3; }
+}
+</style>

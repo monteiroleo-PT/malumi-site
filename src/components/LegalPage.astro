@@ -1,0 +1,155 @@
+---
+import Base from '../layouts/Base.astro';
+import { textos, link } from '../i18n/textos.js';
+
+const { lang = 'pt', page } = Astro.props;
+const t = textos[lang === 'en' ? 'en' : 'pt'];
+const d = t[page];
+const L = (p) => link(lang, p);
+const mailTo = 'studio@malumi.pt';
+---
+<Base lang={lang} title={d.metaTitle} description={d.metaDesc}>
+
+<section class="lg-hero">
+  <div class="lg-hero-inner">
+    <div class="lg-eyebrow">{d.eyebrow}</div>
+    <h1 class="lg-titulo" set:html={d.titulo} />
+    <p class="lg-intro">{d.intro}</p>
+    {d.nota && <p class="lg-nota">{d.nota}</p>}
+    {d.atualizado && <p class="lg-atualizado">{d.atualizado}</p>}
+  </div>
+</section>
+
+<section class="lg-body">
+  <div class="lg-body-inner">
+    {d.sections.map((s) => (
+      <div class="lg-section">
+        <h2>{s.heading}</h2>
+        {s.paragraphs && s.paragraphs.map((p) => <p>{p}</p>)}
+        {s.bullets && (
+          <ul>
+            {s.bullets.map((b) => <li>{b}</li>)}
+          </ul>
+        )}
+        {s.paragraphsAfter && s.paragraphsAfter.map((p) => <p>{p}</p>)}
+      </div>
+    ))}
+    {d.notaContacto && (
+      <p class="lg-contact">{d.notaContacto} <a href={`mailto:${mailTo}`}>{mailTo}</a></p>
+    )}
+  </div>
+</section>
+
+</Base>
+
+<style>
+.lg-hero {
+  background: #F4F1EA;
+  padding: 120px 40px 64px;
+  text-align: center;
+}
+.lg-hero-inner {
+  max-width: 700px;
+  margin: 0 auto;
+}
+.lg-eyebrow {
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: #A85738;
+  margin-bottom: 28px;
+  font-weight: 400;
+}
+.lg-titulo {
+  font-size: 48px;
+  color: #1B2A39;
+  font-weight: 200;
+  letter-spacing: -0.6px;
+  margin: 0 0 24px;
+  line-height: 1.1;
+}
+.lg-titulo :global(em) {
+  font-style: italic;
+  color: #5F5E5A;
+}
+.lg-intro {
+  font-size: 15px;
+  color: #5F5E5A;
+  line-height: 1.75;
+  margin: 0 0 12px;
+  font-weight: 200;
+}
+.lg-nota {
+  font-size: 13px;
+  color: #8F9491;
+  font-style: italic;
+  line-height: 1.6;
+  margin: 16px 0 0;
+  font-weight: 200;
+}
+.lg-atualizado {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: #8F9491;
+  margin: 20px 0 0;
+  font-weight: 300;
+}
+
+.lg-body {
+  background: #FAF7F0;
+  padding: 8px 40px 100px;
+}
+.lg-body-inner {
+  max-width: 700px;
+  margin: 0 auto;
+}
+.lg-section {
+  padding: 40px 0;
+  border-bottom: 0.5px solid #E3DFD5;
+}
+.lg-section:last-of-type { border-bottom: none; }
+.lg-section h2 {
+  font-size: 18px;
+  color: #1B2A39;
+  font-weight: 400;
+  letter-spacing: -0.2px;
+  margin: 0 0 18px;
+}
+.lg-section p {
+  font-size: 14.5px;
+  color: #5F5E5A;
+  line-height: 1.8;
+  margin: 0 0 14px;
+  font-weight: 200;
+}
+.lg-section p:last-child { margin-bottom: 0; }
+.lg-section ul {
+  margin: 0 0 14px;
+  padding-left: 20px;
+}
+.lg-section li {
+  font-size: 14.5px;
+  color: #5F5E5A;
+  line-height: 1.8;
+  font-weight: 200;
+  margin-bottom: 8px;
+}
+.lg-section li:last-child { margin-bottom: 0; }
+.lg-contact {
+  margin-top: 40px;
+  font-size: 14px;
+  color: #5F5E5A;
+  font-weight: 200;
+}
+.lg-contact a {
+  color: #1B2A39;
+  font-weight: 400;
+}
+.lg-contact a:hover { text-decoration: underline; }
+
+@media (max-width: 760px) {
+  .lg-hero { padding: 72px 24px 40px; }
+  .lg-titulo { font-size: 34px; }
+  .lg-body { padding: 8px 24px 64px; }
+  .lg-section { padding: 32px 0; }
+}
+</style>
