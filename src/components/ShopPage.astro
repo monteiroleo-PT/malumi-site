@@ -247,11 +247,20 @@ const L = (p) => link(lang, p);
 .s-note-contact a:hover { text-decoration: underline; }
 
 @media (max-width: 760px) {
-  .s-intro { padding: 64px 24px 24px; }
+  .s-intro { padding: 56px 24px 16px; }
   .s-intro-title { font-size: 36px; }
-  .s-catalog { padding: 32px 24px; }
+  .s-catalog { padding: 24px 24px; }
   .s-pair { grid-template-columns: 1fr; gap: 32px; }
-  .s-fragrance-group { margin-bottom: 64px; }
+  .s-fragrance-group { margin-bottom: 48px; }
+  .s-fragrance-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding-bottom: 12px;
+    margin-bottom: 28px;
+  }
+  .s-fragrance-name { font-size: 24px; }
+  .s-card-line { min-height: 0; margin-bottom: 16px; }
   .s-note { padding: 24px 24px 80px; }
 }
 </style>
