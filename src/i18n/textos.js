@@ -167,7 +167,7 @@ export const textos = {
       metaDesc: 'Como a Malumi recolhe, utiliza e protege os seus dados pessoais, em conformidade com o RGPD.',
       eyebrow: 'INFORMAÇÃO LEGAL',
       titulo: 'Política de <em>Privacidade.</em>',
-      intro: 'Esta Política de Privacidade explica de que forma a Malumi - propriedade da Macalemi, Lda. (NIF PT516440071) - recolhe, utiliza, armazena e protege os dados pessoais de quem visita o website malumi.pt ou contacta a Malumi por qualquer outro meio, em conformidade com o Regulamento Geral sobre a Proteção de Dados (RGPD, Regulamento (UE) 2016/679). Para qualquer questão, contacte-nos através de info@malumi.pt.',
+      intro: 'Esta Política de Privacidade explica de que forma a Malumi - propriedade da Macalemi, Lda. (NIF PT516440071) - recolhe, utiliza, armazena e protege os dados pessoais de quem visita o website malumi.pt ou contacta a Malumi por qualquer outro meio, em conformidade com o Regulamento Geral sobre a Proteção de Dados (RGPD, Regulamento (UE) 2016/679). Para qualquer questão, contacte-nos através de studio@malumi.pt.',
       nota: 'Esta Política de Privacidade é complementada pelos Termos e Condições de Utilização e pelos Termos de Venda.',
       atualizado: 'Última atualização: Julho de 2026.',
       sections: [
@@ -210,7 +210,7 @@ export const textos = {
             'Direito de oposição: contestar a utilização dos dados para determinados fins.',
             'Direito à limitação do tratamento: restringir temporariamente a utilização dos seus dados.',
           ],
-          paragraphsAfter: ['Pode exercer estes direitos através do e-mail info@malumi.pt. Caso não fique satisfeito com a resposta, pode apresentar reclamação junto da Comissão Nacional de Proteção de Dados (CNPD), em www.cnpd.pt.'],
+          paragraphsAfter: ['Pode exercer estes direitos através do e-mail studio@malumi.pt. Caso não fique satisfeito com a resposta, pode apresentar reclamação junto da Comissão Nacional de Proteção de Dados (CNPD), em www.cnpd.pt.'],
         },
         {
           heading: '5. Prazo de conservação',
@@ -273,7 +273,7 @@ export const textos = {
         },
         {
           heading: '7. Contacto',
-          paragraphs: ['Para qualquer questão relativa a estes Termos, contacte-nos através de info@malumi.pt.'],
+          paragraphs: ['Para qualquer questão relativa a estes Termos, contacte-nos através de studio@malumi.pt.'],
         },
       ],
     },
@@ -282,7 +282,7 @@ export const textos = {
       metaDesc: 'Termos que regulam as compras efetuadas em malumi.pt.',
       eyebrow: 'INFORMAÇÃO LEGAL',
       titulo: 'Termos de <em>Venda.</em>',
-      intro: 'Bem-vindo à Malumi. Estes Termos de Venda regulam as compras efetuadas através do website malumi.pt, propriedade da Macalemi, Lda. (NIF PT516440071), em conformidade com o Regulamento Geral sobre a Proteção de Dados (RGPD), a Diretiva de Direitos do Consumidor da União Europeia (2011/83/UE) e o Decreto-Lei n.º 24/2014. Ao efetuar uma compra, aceita os termos aqui estabelecidos. Em caso de dúvidas, contacte-nos através de info@malumi.pt.',
+      intro: 'Bem-vindo à Malumi. Estes Termos de Venda regulam as compras efetuadas através do website malumi.pt, propriedade da Macalemi, Lda. (NIF PT516440071), em conformidade com o Regulamento Geral sobre a Proteção de Dados (RGPD), a Diretiva de Direitos do Consumidor da União Europeia (2011/83/UE) e o Decreto-Lei n.º 24/2014. Ao efetuar uma compra, aceita os termos aqui estabelecidos. Em caso de dúvidas, contacte-nos através de studio@malumi.pt.',
       atualizado: 'Última atualização: Julho de 2026.',
       sections: [
         {
@@ -670,7 +670,7 @@ export const textos = {
       metaDesc: 'How Malumi collects, uses and protects your personal data, in line with GDPR.',
       eyebrow: 'LEGAL INFORMATION',
       titulo: 'Privacy <em>Policy.</em>',
-      intro: 'This Privacy Policy explains how Malumi - owned by Macalemi, Lda. (NIF PT516440071) - collects, uses, stores and protects the personal data of anyone who visits the website malumi.pt or contacts Malumi by any other means, in accordance with the General Data Protection Regulation (GDPR, Regulation (EU) 2016/679). For any questions, contact us at info@malumi.pt.',
+      intro: 'This Privacy Policy explains how Malumi - owned by Macalemi, Lda. (NIF PT516440071) - collects, uses, stores and protects the personal data of anyone who visits the website malumi.pt or contacts Malumi by any other means, in accordance with the General Data Protection Regulation (GDPR, Regulation (EU) 2016/679). For any questions, contact us at studio@malumi.pt.',
       nota: 'This Privacy Policy is complemented by the Terms and Conditions of Use and the Terms of Sale.',
       atualizado: 'Last updated: July 2026.',
       sections: [
@@ -713,7 +713,7 @@ export const textos = {
             'Right to object: contest the use of your data for certain purposes.',
             'Right to restriction of processing: temporarily restrict the use of your data.',
           ],
-          paragraphsAfter: ['You can exercise these rights by emailing info@malumi.pt. If unsatisfied with our response, you may file a complaint with the Portuguese Data Protection Authority (CNPD), at www.cnpd.pt.'],
+          paragraphsAfter: ['You can exercise these rights by emailing studio@malumi.pt. If unsatisfied with our response, you may file a complaint with the Portuguese Data Protection Authority (CNPD), at www.cnpd.pt.'],
         },
         {
           heading: '5. Data retention',
@@ -776,7 +776,7 @@ export const textos = {
         },
         {
           heading: '7. Contact',
-          paragraphs: ['For any questions about these Terms, contact us at info@malumi.pt.'],
+          paragraphs: ['For any questions about these Terms, contact us at studio@malumi.pt.'],
         },
       ],
     },
@@ -785,7 +785,7 @@ export const textos = {
       metaDesc: 'Terms governing purchases made on malumi.pt.',
       eyebrow: 'LEGAL INFORMATION',
       titulo: 'Terms of <em>Sale.</em>',
-      intro: 'Welcome to Malumi. These Terms of Sale govern purchases made through the website malumi.pt, owned by Macalemi, Lda. (NIF PT516440071), in accordance with the General Data Protection Regulation (GDPR), the EU Consumer Rights Directive (2011/83/EU) and Portuguese Decree-Law No. 24/2014. By making a purchase, you accept the terms set out here. If you have any questions, contact us at info@malumi.pt.',
+      intro: 'Welcome to Malumi. These Terms of Sale govern purchases made through the website malumi.pt, owned by Macalemi, Lda. (NIF PT516440071), in accordance with the General Data Protection Regulation (GDPR), the EU Consumer Rights Directive (2011/83/EU) and Portuguese Decree-Law No. 24/2014. By making a purchase, you accept the terms set out here. If you have any questions, contact us at studio@malumi.pt.',
       atualizado: 'Last updated: July 2026.',
       sections: [
         {
