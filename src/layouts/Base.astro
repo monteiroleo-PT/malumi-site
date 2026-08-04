@@ -8,8 +8,9 @@ const L = (p) => link(lang, p);
 // caminho equivalente no outro idioma (para o interruptor PT/EN e hreflang)
 const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const ptPath = pathname.replace(/^\/en(\/|$)/, '/').replace(/\/{2,}/g, '/') || '/';
-const enPath = ptPath === '/' ? '/en/' : '/en' + ptPath;
+const enPath = ptPath === '/' ? '/en' : '/en' + ptPath;
 const altHref = lang === 'en' ? ptPath : enPath;
+const canonical = `https://malumi.pt${lang === 'en' ? enPath : ptPath}`;
 ---
 <!doctype html>
 <html lang={t.lang}>
@@ -21,6 +22,7 @@ const altHref = lang === 'en' ? ptPath : enPath;
   <link rel="icon" href="/favicon.ico" sizes="32x32" />
   <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="canonical" href={canonical} />
   <link rel="alternate" hreflang="pt-PT" href={`https://malumi.pt${ptPath}`} />
   <link rel="alternate" hreflang="en" href={`https://malumi.pt${enPath}`} />
   <link rel="alternate" hreflang="x-default" href={`https://malumi.pt${ptPath}`} />
