@@ -7,7 +7,7 @@ const { lang = 'pt' } = Astro.props;
 const t = textos[lang === 'en' ? 'en' : 'pt'].shop;
 const L = (p) => link(lang, p);
 ---
-<Base lang={lang} title={t.metaTitle} description={t.metaDesc} image={fotoDe('olive') || '/img/hero-atelier.jpg'}>
+<Base lang={lang} title={t.metaTitle} description={t.metaDesc} image="/img/og/olive.jpg">
 
 <section class="s-intro">
   <div class="s-intro-eyebrow"><span class="s-intro-eyebrow-mark"></span>{t.eyebrow}</div>
