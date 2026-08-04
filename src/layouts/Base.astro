@@ -1,7 +1,16 @@
 ---
 import { textos, link } from '../i18n/textos.js';
 
-const { lang = 'pt', title = 'Malumi - Cuidado em forma de objeto.', description = '' } = Astro.props;
+const {
+  lang = 'pt',
+  title = 'Malumi - Cuidado em forma de objeto.',
+  description = '',
+  // Imagem de partilha (Open Graph). Caminho local ou URL completo.
+  image = '/img/hero-atelier.jpg',
+  ogType = 'website',
+  // Dados estruturados JSON-LD: objecto ou array de objectos schema.org
+  jsonLd = null,
+} = Astro.props;
 const t = textos[lang === 'en' ? 'en' : 'pt'];
 const L = (p) => link(lang, p);
 
@@ -11,6 +20,7 @@ const ptPath = pathname.replace(/^\/en(\/|$)/, '/').replace(/\/{2,}/g, '/') || '
 const enPath = ptPath === '/' ? '/en' : '/en' + ptPath;
 const altHref = lang === 'en' ? ptPath : enPath;
 const canonical = `https://malumi.pt${lang === 'en' ? enPath : ptPath}`;
+const ogImage = image.startsWith('http') ? image : `https://malumi.pt${image}`;
 ---
 <!doctype html>
 <html lang={t.lang}>
@@ -26,6 +36,24 @@ const canonical = `https://malumi.pt${lang === 'en' ? enPath : ptPath}`;
   <link rel="alternate" hreflang="pt-PT" href={`https://malumi.pt${ptPath}`} />
   <link rel="alternate" hreflang="en" href={`https://malumi.pt${enPath}`} />
   <link rel="alternate" hreflang="x-default" href={`https://malumi.pt${ptPath}`} />
+
+  <!-- Open Graph / partilha em redes sociais -->
+  <meta property="og:site_name" content="Malumi" />
+  <meta property="og:type" content={ogType} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:alt" content={title} />
+  <meta property="og:locale" content={lang === 'en' ? 'en_GB' : 'pt_PT'} />
+  <meta property="og:locale:alternate" content={lang === 'en' ? 'pt_PT' : 'en_GB'} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+
+  {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300&display=swap" />

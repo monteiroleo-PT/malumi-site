@@ -17,8 +17,43 @@ const metaTitulo =
   lang === 'en'
     ? `${vela.name} - ${frag.name} Candle - Malumi`
     : `${vela.name} - Vela ${frag.name} - Malumi`;
+
+// --- Dados estruturados schema.org/Product ---
+const urlProduto = `https://malumi.pt${lang === 'en' ? '/en' : ''}/product/${vela.slug}`;
+const precoNum = vela.price.replace(/[^\d.,]/g, '').replace(',', '.');
+const imagens = galeria.map((src) => `https://malumi.pt${src}`);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: vela.name,
+  description: vela.line,
+  sku: vela.slug,
+  url: urlProduto,
+  ...(imagens.length > 0 && { image: imagens }),
+  brand: { '@type': 'Brand', name: 'Malumi' },
+  category: lang === 'en' ? 'Scented candle' : 'Vela perfumada',
+  offers: {
+    '@type': 'Offer',
+    url: vela.stripeUrl || urlProduto,
+    price: precoNum,
+    priceCurrency: 'EUR',
+    availability: 'https://schema.org/InStock',
+    itemCondition: 'https://schema.org/NewCondition',
+    seller: { '@type': 'Organization', name: 'Malumi' },
+    // Política de devolução conforme a página /devolucoes-reembolsos
+    hasMerchantReturnPolicy: {
+      '@type': 'MerchantReturnPolicy',
+      applicableCountry: 'PT',
+      returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+      merchantReturnDays: 30,
+      returnMethod: 'https://schema.org/ReturnByMail',
+      returnFees: 'https://schema.org/ReturnShippingFees',
+    },
+  },
+};
 ---
-<Base lang={lang} title={metaTitulo} description={vela.line}>
+<Base lang={lang} title={metaTitulo} description={vela.line} ogType="product" image={galeria[0] || '/img/hero-atelier.jpg'} jsonLd={jsonLd}>
 
 <!-- TOPO DO PRODUTO -->
 <section class="p-top">

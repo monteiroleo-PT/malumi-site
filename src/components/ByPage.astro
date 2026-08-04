@@ -5,7 +5,7 @@ import { textos } from '../i18n/textos.js';
 const { lang = 'pt' } = Astro.props;
 const t = textos[lang === 'en' ? 'en' : 'pt'].by;
 ---
-<Base lang={lang} title={t.metaTitle} description={t.metaDesc}>
+<Base lang={lang} title={t.metaTitle} description={t.metaDesc} image="/img/edicao-privada.jpg">
 
 <!-- HERO -->
 <section class="by-hero">

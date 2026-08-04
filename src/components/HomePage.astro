@@ -6,8 +6,40 @@ import { textos, link } from '../i18n/textos.js';
 const { lang = 'pt' } = Astro.props;
 const t = textos[lang === 'en' ? 'en' : 'pt'].home;
 const L = (p) => link(lang, p);
+
+// --- Dados estruturados: Organização + Website ---
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': 'https://malumi.pt/#organizacao',
+    name: 'Malumi',
+    url: 'https://malumi.pt/',
+    logo: 'https://malumi.pt/img/malumi-wordmark-blue.png',
+    email: 'studio@malumi.pt',
+    slogan: lang === 'en' ? 'Care in the form of an object.' : 'Cuidado em forma de objeto.',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Sintra',
+      addressCountry: 'PT',
+    },
+    sameAs: [
+      'https://www.instagram.com/malumi.pt/',
+      'https://pt.pinterest.com/malumi_pt/',
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': 'https://malumi.pt/#website',
+    url: 'https://malumi.pt/',
+    name: 'Malumi',
+    inLanguage: lang === 'en' ? 'en' : 'pt-PT',
+    publisher: { '@id': 'https://malumi.pt/#organizacao' },
+  },
+];
 ---
-<Base lang={lang} title={t.metaTitle} description={t.metaDesc}>
+<Base lang={lang} title={t.metaTitle} description={t.metaDesc} image="/img/hero-atelier.jpg" jsonLd={jsonLd}>
 
 <!-- HERO -->
 <section class="m-hero">
