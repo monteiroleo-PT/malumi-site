@@ -16,7 +16,7 @@ const jsonLd = [
     name: 'Malumi',
     url: 'https://malumi.pt/',
     logo: 'https://malumi.pt/img/malumi-wordmark-blue.png',
-    email: 'studio@malumi.pt',
+    email: 'info@malumi.pt',
     slogan: lang === 'en' ? 'Care in the form of an object.' : 'Cuidado em forma de objeto.',
     address: {
       '@type': 'PostalAddress',
@@ -39,7 +39,7 @@ const jsonLd = [
   },
 ];
 ---
-<Base lang={lang} title={t.metaTitle} description={t.metaDesc} image="/img/hero-atelier.jpg" jsonLd={jsonLd}>
+<Base lang={lang} title={t.metaTitle} description={t.metaDesc} image="/img/og/malumi.jpg" jsonLd={jsonLd}>
 
 <!-- HERO -->
 <section class="m-hero">
@@ -146,7 +146,7 @@ const jsonLd = [
       <h2 class="m-edicao-title" set:html={t.edicaoTitulo} />
       <p class="m-edicao-text">{t.edicaoTexto}</p>
       <div class="m-edicao-note">{t.edicaoNote}</div>
-      <a href={`mailto:studio@malumi.pt?subject=${encodeURIComponent(t.edicaoMailSubject)}`} class="m-edicao-cta">{t.edicaoCta}</a>
+      <a href={`mailto:info@malumi.pt?subject=${encodeURIComponent(t.edicaoMailSubject)}`} class="m-edicao-cta">{t.edicaoCta}</a>
     </div>
   </div>
 </section>

@@ -6,7 +6,7 @@ const { lang = 'pt', page } = Astro.props;
 const t = textos[lang === 'en' ? 'en' : 'pt'];
 const d = t[page];
 const L = (p) => link(lang, p);
-const mailTo = 'studio@malumi.pt';
+const mailTo = 'info@malumi.pt';
 ---
 <Base lang={lang} title={d.metaTitle} description={d.metaDesc}>
 
