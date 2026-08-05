@@ -91,20 +91,14 @@ const t = textos[lang === 'en' ? 'en' : 'pt'].by;
   </div>
 </section>
 
-<!-- PARCERIAS -->
-<section class="by-cases">
-  <div class="by-section-eyebrow">{t.casosEyebrow}</div>
-  <h2 class="by-section-title" set:html={t.casosTitulo} />
-  <p class="by-section-sub">{t.casosSub}</p>
-
-  <div class="by-cases-grid">
-    {[1, 2, 3].map(() => (
-      <div class="by-case-box by-case-box-empty">
-        <div class="by-case-box-text">{t.casoBox}<em>{t.casoBoxSub}</em></div>
-      </div>
-    ))}
-  </div>
-</section>
+<!--
+  PARCERIAS — secção retirada em Agosto 2026.
+  Retirada por não haver ainda nenhuma edição fechada e executada: três caixas
+  "EM BREVE" liam-se como ausência de trabalho feito. Repor quando existir um
+  caso publicável, com imagens e narrativa reais.
+  Os textos continuam em textos.js (casosEyebrow, casosTitulo, casosSub) e o
+  CSS continua mais abaixo neste ficheiro (.by-cases, .by-cases-grid).
+-->
 
 <!-- CONTACTO -->
 <section class="by-contact">
