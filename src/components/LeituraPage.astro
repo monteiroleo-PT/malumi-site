@@ -1,0 +1,501 @@
+---
+import Base from '../layouts/Base.astro';
+import { velas, fragrances, fotoDe, velaLoc, fragLoc } from '../data/velas.js';
+import { textos, link } from '../i18n/textos.js';
+
+const { lang = 'pt' } = Astro.props;
+const t = textos[lang === 'en' ? 'en' : 'pt'].leitura;
+const tShop = textos[lang === 'en' ? 'en' : 'pt'].shop;
+const tProd = textos[lang === 'en' ? 'en' : 'pt'].product;
+const tCuidado = textos[lang === 'en' ? 'en' : 'pt'].cuidado;
+const L = (p) => link(lang, p);
+
+// Resultados: uma família por fragrância, com as suas duas peças.
+const resultados = fragrances.map((f0) => {
+  const f = fragLoc(f0, lang);
+  const pecas = velas
+    .filter((v) => v.fragrance === f.slug)
+    .map((v0) => {
+      const v = velaLoc(v0, lang);
+      return { ...v, foto: fotoDe(v.slug) };
+    });
+  // Composição declarada (mesma fonte da página /cuidado-fragrancia)
+  const declarada = tCuidado.familias.find((x) => x.nome === f0.name);
+  return { ...f, quote: pecas[0].fragranciaQuote, notas: pecas[0].notas, declarada, pecas };
+});
+---
+<Base lang={lang} title={t.metaTitle} description={t.metaDesc} image="/img/og/malumi.jpg">
+
+<section class="lt" data-total={t.perguntas.length}>
+
+  <!-- INTRO -->
+  <div class="lt-step lt-intro" data-step="0">
+    <div class="lt-eyebrow"><span class="lt-eyebrow-mark"></span>{t.eyebrow}</div>
+    <h1 class="lt-title" set:html={t.titulo} />
+    <p class="lt-sub">{t.sub}</p>
+    <button type="button" class="lt-begin">{t.comecar}</button>
+  </div>
+
+  <!-- PERGUNTAS -->
+  {t.perguntas.map((q, i) => (
+    <div class="lt-step lt-question" data-step={i + 1} hidden>
+      <div class="lt-counter">{t.passo} {String(i + 1).padStart(2, '0')} {t.de} {String(t.perguntas.length).padStart(2, '0')}</div>
+      <h2 class="lt-question-title">{q.titulo}</h2>
+      <div class="lt-options">
+        {q.opcoes.map(([label, frag]) => (
+          <button type="button" class="lt-option" data-frag={frag}>{label}</button>
+        ))}
+      </div>
+      {i > 0 && <button type="button" class="lt-back">{t.anterior}</button>}
+    </div>
+  ))}
+
+  <!-- RESULTADOS -->
+  {resultados.map((r) => (
+    <div class="lt-step lt-result" data-result={r.slug} hidden>
+      <div class="lt-eyebrow"><span class="lt-eyebrow-mark"></span>{t.resultadoEyebrow}</div>
+      <h2 class="lt-result-name"><em>{r.name}</em></h2>
+      <div class="lt-result-family">{r.family}</div>
+      <p class="lt-result-quote">{r.quote}</p>
+
+      <p class="lt-result-note">{t.resultadoDuas}</p>
+
+      <div class="lt-pair">
+        {r.pecas.map((v) => (
+          <div class="lt-card">
+            <a
+              href={L(`/product/${v.slug}`)}
+              class="lt-card-img"
+              style={v.foto ? `background: url('${v.foto}') center/cover;` : `background: ${v.gradient};`}
+              aria-label={v.name}
+            ></a>
+            <h3 class="lt-card-name"><a href={L(`/product/${v.slug}`)}>{v.name}</a></h3>
+            <p class="lt-card-line">{v.line}</p>
+            <div class="lt-card-meta">
+              <span class="lt-card-price">{v.price}</span>
+              <a href={L(`/product/${v.slug}`)} class="lt-card-link">{tShop.verPeca}</a>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="lt-result-foot">
+        <button type="button" class="lt-comp-toggle" aria-expanded="false" data-abrir={t.verComposicao} data-fechar={t.fecharComposicao}>
+          <span class="lt-comp-label">{t.verComposicao}</span>
+          <span class="lt-comp-sign" aria-hidden="true"></span>
+        </button>
+
+        <div class="lt-comp-panel" hidden>
+          <div class="lt-comp-notes">
+            <div><span>{tProd.topo}</span><p>{r.notas.topo}</p></div>
+            <div><span>{tProd.coracao}</span><p>{r.notas.coracao}</p></div>
+            <div><span>{tProd.base}</span><p>{r.notas.base}</p></div>
+          </div>
+          {r.declarada && (
+            <div class="lt-comp-declared">
+              <p class="lt-comp-contem"><span>{tCuidado.contemLabel}</span> {r.declarada.contem}</p>
+              <p class="lt-comp-ufi"><span>{tCuidado.ufiLabel}</span> {r.declarada.ufi}</p>
+            </div>
+          )}
+          <p class="lt-comp-nota">{t.composicaoNota}</p>
+        </div>
+
+        <p class="lt-redo">
+          {t.refazerTexto} <button type="button" class="lt-restart">{t.refazerCta}</button>
+          <span class="lt-sep">·</span>
+          <a href={L('/shop')}>{t.verTodas}</a>
+        </p>
+      </div>
+    </div>
+  ))}
+
+</section>
+
+</Base>
+
+<script>
+  const raiz = document.querySelector('.lt');
+  if (raiz) {
+    const total = Number(raiz.dataset.total);
+    const passos = raiz.querySelectorAll('.lt-step');
+    // Terceira pergunta (índice 2) desempata: é a mais sensorial.
+    const DESEMPATE = 2;
+    let respostas = [];
+
+    const mostrar = (sel) => {
+      passos.forEach((p) => (p.hidden = true));
+      const alvo = raiz.querySelector(sel);
+      if (alvo) {
+        alvo.hidden = false;
+        const y = raiz.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    };
+
+    const apurar = () => {
+      const contagem = {};
+      respostas.forEach((f) => (contagem[f] = (contagem[f] || 0) + 1));
+      const max = Math.max(...Object.values(contagem));
+      const empatados = Object.keys(contagem).filter((f) => contagem[f] === max);
+      if (empatados.length === 1) return empatados[0];
+      // Empate: vale a resposta da pergunta de desempate, se estiver entre as empatadas.
+      const decisiva = respostas[DESEMPATE];
+      return empatados.includes(decisiva) ? decisiva : empatados[0];
+    };
+
+    raiz.querySelector('.lt-begin')?.addEventListener('click', () => {
+      respostas = [];
+      mostrar('[data-step="1"]');
+    });
+
+    raiz.querySelectorAll('.lt-option').forEach((botao) => {
+      botao.addEventListener('click', () => {
+        const passo = Number(botao.closest('.lt-question').dataset.step);
+        respostas[passo - 1] = botao.dataset.frag;
+        respostas.length = passo;
+        if (passo < total) mostrar(`[data-step="${passo + 1}"]`);
+        else mostrar(`[data-result="${apurar()}"]`);
+      });
+    });
+
+    raiz.querySelectorAll('.lt-back').forEach((botao) => {
+      botao.addEventListener('click', () => {
+        const passo = Number(botao.closest('.lt-question').dataset.step);
+        mostrar(`[data-step="${passo - 1}"]`);
+      });
+    });
+
+    raiz.querySelectorAll('.lt-restart').forEach((botao) => {
+      botao.addEventListener('click', () => {
+        respostas = [];
+        raiz.querySelectorAll('.lt-comp-toggle[aria-expanded="true"]').forEach((b) => b.click());
+        mostrar('[data-step="1"]');
+      });
+    });
+
+    // Persiana da composição declarada — abre no lugar, sem sair da página.
+    raiz.querySelectorAll('.lt-comp-toggle').forEach((botao) => {
+      const painel = botao.parentElement.querySelector('.lt-comp-panel');
+      const etiqueta = botao.querySelector('.lt-comp-label');
+      botao.addEventListener('click', () => {
+        const aberto = botao.getAttribute('aria-expanded') === 'true';
+        if (aberto) {
+          painel.style.maxHeight = '0px';
+          botao.setAttribute('aria-expanded', 'false');
+          etiqueta.textContent = botao.dataset.abrir;
+          painel.addEventListener('transitionend', function esconder() {
+            if (botao.getAttribute('aria-expanded') === 'false') painel.hidden = true;
+            painel.removeEventListener('transitionend', esconder);
+          });
+        } else {
+          painel.hidden = false;
+          painel.style.maxHeight = painel.scrollHeight + 'px';
+          botao.setAttribute('aria-expanded', 'true');
+          etiqueta.textContent = botao.dataset.fechar;
+        }
+      });
+    });
+  }
+</script>
+
+<style>
+.lt {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 140px 40px 120px;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.lt-step[hidden] { display: none; }
+
+.lt-eyebrow {
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: #A85738;
+  margin-bottom: 32px;
+  font-weight: 400;
+}
+.lt-eyebrow-mark {
+  display: inline-block;
+  width: 24px;
+  height: 0.5px;
+  background: #A85738;
+  vertical-align: middle;
+  margin-right: 16px;
+  opacity: 0.6;
+}
+
+/* INTRO */
+.lt-title {
+  font-size: 60px;
+  line-height: 1.05;
+  color: #1B2A39;
+  font-weight: 200;
+  letter-spacing: -1px;
+  margin: 0 0 32px;
+}
+.lt-title :global(em) { font-style: normal; color: #5F5E5A; }
+.lt-sub {
+  font-size: 17px;
+  color: #5F5E5A;
+  font-style: italic;
+  line-height: 1.7;
+  font-weight: 200;
+  margin: 0 0 48px;
+  max-width: 540px;
+}
+.lt-begin {
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #1B2A39;
+  background: transparent;
+  border: 0.5px solid #1B2A39;
+  padding: 18px 44px;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s;
+  font-weight: 300;
+}
+.lt-begin:hover { background: #1B2A39; color: #F4F1EA; }
+
+/* PERGUNTAS */
+.lt-counter {
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: #8F9491;
+  margin-bottom: 28px;
+  font-weight: 300;
+}
+.lt-question-title {
+  font-size: 38px;
+  line-height: 1.2;
+  color: #1B2A39;
+  font-weight: 200;
+  letter-spacing: -0.6px;
+  margin: 0 0 48px;
+}
+.lt-options { display: flex; flex-direction: column; gap: 0; border-top: 0.5px solid #D8D2C8; }
+.lt-option {
+  font-family: inherit;
+  text-align: left;
+  font-size: 17px;
+  color: #2A2A2A;
+  background: transparent;
+  border: none;
+  border-bottom: 0.5px solid #D8D2C8;
+  padding: 28px 40px 28px 4px;
+  cursor: pointer;
+  font-weight: 200;
+  position: relative;
+  transition: padding-left 0.25s, color 0.25s;
+}
+.lt-option::after {
+  content: '→';
+  position: absolute;
+  right: 8px;
+  opacity: 0;
+  transition: opacity 0.25s, right 0.25s;
+  color: #A85738;
+}
+.lt-option:hover { padding-left: 16px; color: #1B2A39; }
+.lt-option:hover::after { opacity: 1; right: 0; }
+.lt-back {
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #8F9491;
+  background: transparent;
+  border: none;
+  padding: 32px 0 0;
+  cursor: pointer;
+  font-weight: 300;
+}
+.lt-back:hover { color: #1B2A39; }
+
+/* RESULTADO */
+.lt-result-name {
+  font-size: 52px;
+  color: #1B2A39;
+  font-weight: 200;
+  letter-spacing: -0.8px;
+  margin: 0 0 12px;
+  line-height: 1.1;
+}
+.lt-result-name :global(em) { font-style: italic; }
+.lt-result-family {
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: #8F9491;
+  margin-bottom: 32px;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+.lt-result-quote {
+  font-size: 20px;
+  color: #5F5E5A;
+  font-style: italic;
+  line-height: 1.6;
+  font-weight: 200;
+  margin: 0 0 56px;
+  padding-left: 24px;
+  border-left: 0.5px solid #D8D2C8;
+}
+.lt-result-note {
+  font-size: 20px;
+  color: #1B2A39;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.2px;
+  margin: 0 0 40px;
+  padding-top: 32px;
+  border-top: 0.5px solid #D8D2C8;
+  max-width: 560px;
+}
+.lt-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 56px;
+}
+.lt-card-img {
+  display: block;
+  aspect-ratio: 4 / 5;
+  margin-bottom: 20px;
+}
+.lt-card-name {
+  font-size: 22px;
+  font-weight: 300;
+  margin: 0 0 8px;
+  letter-spacing: -0.3px;
+}
+.lt-card-name a { color: #1B2A39; text-decoration: none; }
+.lt-card-line {
+  font-size: 13px;
+  color: #6B6B6B;
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0 0 16px;
+  font-weight: 200;
+}
+.lt-card-meta { display: flex; align-items: center; justify-content: space-between; }
+.lt-card-price { font-size: 15px; color: #2A2A2A; font-weight: 300; }
+.lt-card-link { font-size: 10px; letter-spacing: 2px; color: #A85738; text-decoration: none; font-weight: 400; }
+
+.lt-result-foot { border-top: 0.5px solid #D8D2C8; padding-top: 32px; }
+
+/* PERSIANA DA COMPOSIÇÃO */
+.lt-comp-toggle {
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #1B2A39;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.lt-comp-sign {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  position: relative;
+}
+.lt-comp-sign::before,
+.lt-comp-sign::after {
+  content: '';
+  position: absolute;
+  background: #A85738;
+  transition: transform 0.3s;
+}
+.lt-comp-sign::before { top: 4px; left: 0; width: 9px; height: 0.5px; }
+.lt-comp-sign::after { left: 4px; top: 0; width: 0.5px; height: 9px; }
+.lt-comp-toggle[aria-expanded='true'] .lt-comp-sign::after { transform: scaleY(0); }
+
+.lt-comp-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.lt-comp-notes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 32px 0 0;
+}
+.lt-comp-notes span {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #8F9491;
+  margin-bottom: 8px;
+  font-weight: 300;
+}
+.lt-comp-notes p {
+  font-size: 13.5px;
+  color: #2A2A2A;
+  line-height: 1.6;
+  margin: 0;
+  font-weight: 200;
+}
+.lt-comp-declared { padding: 28px 0 0; }
+.lt-comp-contem,
+.lt-comp-ufi {
+  font-size: 11.5px;
+  color: #6B6B6B;
+  line-height: 1.7;
+  margin: 0 0 10px;
+  font-weight: 200;
+  word-break: break-word;
+}
+.lt-comp-contem span,
+.lt-comp-ufi span { color: #2A2A2A; font-weight: 400; }
+.lt-comp-nota {
+  font-size: 11.5px;
+  color: #8F9491;
+  font-style: italic;
+  line-height: 1.7;
+  margin: 20px 0 8px;
+  font-weight: 200;
+  border-top: 0.5px solid #D8D2C8;
+  padding-top: 16px;
+}
+.lt-redo {
+  font-size: 13px;
+  color: #8F9491;
+  font-style: italic;
+  font-weight: 200;
+  margin: 20px 0 0;
+}
+.lt-redo button {
+  font-family: inherit;
+  font-size: 13px;
+  font-style: italic;
+  color: #A85738;
+  background: transparent;
+  border: none;
+  border-bottom: 0.5px solid #D8D2C8;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 200;
+}
+.lt-redo a { color: #8F9491; text-decoration: none; border-bottom: 0.5px solid #D8D2C8; }
+.lt-sep { margin: 0 8px; opacity: 0.5; }
+
+@media (max-width: 720px) {
+  .lt { padding: 100px 24px 80px; }
+  .lt-title { font-size: 40px; }
+  .lt-question-title { font-size: 28px; }
+  .lt-result-name { font-size: 38px; }
+  .lt-result-quote { font-size: 17px; }
+  .lt-pair { grid-template-columns: 1fr; gap: 48px; }
+  .lt-option { font-size: 16px; padding: 24px 32px 24px 4px; }
+  .lt-result-note { font-size: 17px; }
+  .lt-comp-notes { grid-template-columns: 1fr; gap: 20px; }
+}
+</style>

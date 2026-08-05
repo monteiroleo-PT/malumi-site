@@ -15,6 +15,17 @@ const L = (p) => link(lang, p);
   <p class="s-intro-sub">{t.sub}</p>
 </section>
 
+<!-- CONVITE À LEITURA -->
+<section class="s-invite">
+  <div class="s-invite-inner">
+    <div>
+      <p class="s-invite-title">{t.conviteTitulo}</p>
+      <p class="s-invite-text">{t.conviteTexto}</p>
+    </div>
+    <a href={L('/leitura')} class="s-invite-cta">{t.conviteCta}</a>
+  </div>
+</section>
+
 <section class="s-catalog">
   {fragrances.map((f0) => {
     const f = fragLoc(f0, lang);
@@ -52,6 +63,11 @@ const L = (p) => link(lang, p);
   })}
 </section>
 
+<!-- CONVITE, REPETIÇÃO LEVE -->
+<section class="s-invite-end">
+  <p>{t.conviteFim} <a href={L('/leitura')}>{t.conviteCta}</a></p>
+</section>
+
 <section class="s-note">
   <p class="s-note-text">{t.nota}</p>
   <p class="s-note-contact">{t.notaContacto} <a href="mailto:info@malumi.pt">info@malumi.pt</a></p>
@@ -60,6 +76,83 @@ const L = (p) => link(lang, p);
 </Base>
 
 <style>
+/* CONVITE À LEITURA */
+.s-invite {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.s-invite-inner {
+  background: #D8D2C8;
+  padding: 32px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+.s-invite-title {
+  font-size: 17px;
+  color: #1B2A39;
+  font-weight: 300;
+  margin: 0 0 6px;
+  letter-spacing: -0.2px;
+}
+.s-invite-text {
+  font-size: 13.5px;
+  color: #5F5E5A;
+  font-style: italic;
+  font-weight: 200;
+  margin: 0;
+  line-height: 1.6;
+}
+.s-invite-cta {
+  flex-shrink: 0;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #A85738;
+  text-decoration: none;
+  font-weight: 400;
+  border-bottom: 0.5px solid rgba(168, 87, 56, 0.35);
+  padding-bottom: 4px;
+  transition: border-color 0.25s;
+}
+.s-invite-cta:hover { border-color: #A85738; }
+
+/* CONVITE, REPETIÇÃO LEVE NO FIM */
+.s-invite-end {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 40px 0;
+  text-align: center;
+}
+.s-invite-end p {
+  font-size: 14px;
+  color: #6B6B6B;
+  font-style: italic;
+  font-weight: 200;
+  margin: 0;
+}
+.s-invite-end a {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #A85738;
+  font-style: normal;
+  font-weight: 400;
+  white-space: nowrap;
+  margin-left: 10px;
+  border-bottom: 0.5px solid rgba(168, 87, 56, 0.35);
+  padding-bottom: 3px;
+  transition: border-color 0.25s;
+}
+.s-invite-end a:hover { border-color: #A85738; }
+
+@media (max-width: 720px) {
+  .s-invite { padding: 0 24px; }
+  .s-invite-inner { flex-direction: column; align-items: flex-start; gap: 20px; padding: 28px; }
+  .s-invite-end { padding: 24px 24px 0; }
+  .s-invite-end a { display: block; margin: 12px 0 0; }
+}
+
 .s-intro {
   padding: 100px 40px 40px;
   max-width: 960px;

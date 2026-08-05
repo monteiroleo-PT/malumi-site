@@ -5,6 +5,7 @@ import { textos, link } from '../i18n/textos.js';
 
 const { lang = 'pt' } = Astro.props;
 const t = textos[lang === 'en' ? 'en' : 'pt'].home;
+const tShop = textos[lang === 'en' ? 'en' : 'pt'].shop;
 const L = (p) => link(lang, p);
 
 // --- Dados estruturados: Organização + Website ---
@@ -100,7 +101,10 @@ const jsonLd = [
                 <p class="m-card-line">{v.line}</p>
                 <div class="m-card-meta">
                   <span class="m-card-price">{v.price}</span>
-                  <a href={L(`/product/${v.slug}`)} class="m-card-link">{t.verPeca}</a>
+                  <span class="m-card-actions">
+                    <a href={L(`/product/${v.slug}`)} class="m-card-link">{t.verPeca}</a>
+                    <a href={v.stripeUrl} class="m-buy">{tShop.comprar}</a>
+                  </span>
                 </div>
               </div>
             );
@@ -467,6 +471,30 @@ const jsonLd = [
   font-weight: 400;
 }
 .m-card-link:hover { text-decoration: underline; }
+.m-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.m-buy {
+  display: inline-block;
+  padding: 11px 22px;
+  background: transparent;
+  color: #1B2A39;
+  border: 0.5px solid #1B2A39;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  font-weight: 400;
+  transition: all 0.3s;
+}
+.m-buy:hover {
+  background: #1B2A39;
+  color: #F4F1EA;
+}
+@media (max-width: 720px) {
+  .m-card-actions { gap: 14px; }
+  .m-buy { padding: 10px 16px; }
+}
 
 /* ATELIER */
 .m-atelier {
