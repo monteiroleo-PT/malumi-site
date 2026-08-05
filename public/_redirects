@@ -4,6 +4,8 @@
 # conteúdo indexado era demonstração do tema (mobiliário, colchões, portfolio)
 # e deve continuar a devolver 404 — é o sinal correcto para o Google os
 # remover do índice.
+#
+# Sem âncoras nos destinos: neste formato o cardinal inicia um comentário.
 
-/about-us     /#atelier     301
-/contact-us   /#conversar   301
+/about-us     /   301
+/contact-us   /   301
