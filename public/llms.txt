@@ -1,0 +1,46 @@
+# Malumi
+
+> Atelier de design sensorial em Sintra, Portugal. A Malumi cria velas autorais feitas à mão: cuidado em forma de objeto. Não ilumina apenas um espaço: cria pausa, memória e presença.
+
+O site é bilingue. As páginas em português vivem na raiz e as versões em inglês em /en/. Todos os URLs terminam com barra final.
+
+## Marca
+
+- [Malumi : página inicial](https://malumi.pt/): atelier, catálogo, edição privada e contacto.
+- [Malumi by](https://malumi.pt/by/): edições autorais em parceria para hotelaria boutique, design de interiores, arquitectura e imobiliária. Método em cinco passos: leitura, interpretação, proposta, co-assinatura, produção.
+- [Sustentabilidade](https://malumi.pt/sustentabilidade/): matérias, produção e opções de fim de vida das peças.
+
+## Velas
+
+Seis peças em três fragrâncias, todas feitas à mão em Sintra.
+
+- [Olive](https://malumi.pt/product/olive/): Primavera em Sintra (aromático amadeirado). O verde-oliva que respira sob a copa dos pinheiros. € 68.
+- [Nordic](https://malumi.pt/product/nordic/): Primavera em Sintra (aromático amadeirado). A névoa nórdica que cobre a serra antes do mar. € 68.
+- [Onyx](https://malumi.pt/product/onyx/): Golden Oud (oriental amadeirado). Mistério e sofisticação num só reflexo. € 72.
+- [Cotto](https://malumi.pt/product/cotto/): Golden Oud (oriental amadeirado). O terracota que nos liga à terra e à tradição. € 72.
+- [Amber](https://malumi.pt/product/amber/): Serenata di Fiori (âmbar floral). O calor dourado que ilumina qualquer espaço. € 68.
+- [Violet](https://malumi.pt/product/violet/): Serenata di Fiori (âmbar floral). A violeta entre rosa e baunilha, a doçura que não se impõe. € 68.
+
+- [Todas as velas](https://malumi.pt/shop/): catálogo completo, organizado por fragrância.
+- [Leitura](https://malumi.pt/leitura/): pequeno percurso de perguntas que sugere a fragrância mais próxima de quem lê.
+
+## Apoio
+
+- [Perguntas frequentes](https://malumi.pt/faq/)
+- [Guia de cuidado e fragrância](https://malumi.pt/cuidado-fragrancia/): como acender, cuidar e conservar uma vela Malumi.
+- [Pagamentos e envio](https://malumi.pt/pagamentos-envio/)
+- [Devoluções e reembolsos](https://malumi.pt/devolucoes-reembolsos/)
+
+## English
+
+- [Malumi : home](https://malumi.pt/en/)
+- [Malumi by](https://malumi.pt/en/by/)
+- [Candles](https://malumi.pt/en/shop/)
+- [Reading](https://malumi.pt/en/leitura/)
+- [FAQ](https://malumi.pt/en/faq/)
+
+## Opcional
+
+- [Política de privacidade](https://malumi.pt/politica-privacidade/)
+- [Termos e condições de utilização](https://malumi.pt/termos-condicoes/)
+- [Termos de venda](https://malumi.pt/termos-venda/)

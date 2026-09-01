@@ -183,7 +183,7 @@ const jsonLd = [
     {velas.map((v) => {
       const foto = fotoDe(v.slug);
       return (
-        <a href={L(`/product/${v.slug}`)} class="m-insta-item" style={foto ? `background: url('${foto}') center/cover;` : `background: ${v.gradient};`} aria-label={v.name}></a>
+        <a href={L(`/product/${v.slug}`)} class="m-insta-item" style={foto ? `background: url('${foto}') center/cover;` : `background: ${v.gradient};`}><span class="texto-oculto">{v.name}</span></a>
       );
     })}
   </div>

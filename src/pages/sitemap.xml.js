@@ -1,4 +1,5 @@
 import { velas } from '../data/velas.js';
+import { comBarra } from '../i18n/textos.js';
 
 const SITE = 'https://malumi.pt';
 
@@ -39,13 +40,16 @@ export function GET() {
   const entradas = lista
     .map((rota) => {
       const { pt, en } = alternates(rota);
+      const loc = comBarra(rota);
+      const locPt = comBarra(pt);
+      const locEn = comBarra(en);
       const prioridade = rota === '/' ? '1.0' : rota === '/shop' || rota === '/by' ? '0.9' : '0.7';
       return [
         '  <url>',
-        `    <loc>${SITE}${rota === '/' ? '/' : rota}</loc>`,
-        `    <xhtml:link rel="alternate" hreflang="pt-PT" href="${SITE}${pt === '/' ? '/' : pt}"/>`,
-        `    <xhtml:link rel="alternate" hreflang="en" href="${SITE}${en}"/>`,
-        `    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE}${pt === '/' ? '/' : pt}"/>`,
+        `    <loc>${SITE}${loc}</loc>`,
+        `    <xhtml:link rel="alternate" hreflang="pt-PT" href="${SITE}${locPt}"/>`,
+        `    <xhtml:link rel="alternate" hreflang="en" href="${SITE}${locEn}"/>`,
+        `    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE}${locPt}"/>`,
         `    <priority>${prioridade}</priority>`,
         '  </url>',
       ].join('\n');

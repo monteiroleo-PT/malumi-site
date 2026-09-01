@@ -67,8 +67,7 @@ const resultados = fragrances.map((f0) => {
               href={L(`/product/${v.slug}`)}
               class="lt-card-img"
               style={v.foto ? `background: url('${v.foto}') center/cover;` : `background: ${v.gradient};`}
-              aria-label={v.name}
-            ></a>
+            ><span class="texto-oculto">{v.name}</span></a>
             <h3 class="lt-card-name"><a href={L(`/product/${v.slug}`)}>{v.name}</a></h3>
             <p class="lt-card-line">{v.line}</p>
             <div class="lt-card-meta">

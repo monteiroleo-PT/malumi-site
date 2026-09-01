@@ -1,5 +1,5 @@
 ---
-import { textos, link } from '../i18n/textos.js';
+import { textos, link, comBarra } from '../i18n/textos.js';
 
 const {
   lang = 'pt',
@@ -15,9 +15,10 @@ const t = textos[lang === 'en' ? 'en' : 'pt'];
 const L = (p) => link(lang, p);
 
 // caminho equivalente no outro idioma (para o interruptor PT/EN e hreflang)
-const pathname = Astro.url.pathname.replace(/\/+$/, '') || '/';
-const ptPath = pathname.replace(/^\/en(\/|$)/, '/').replace(/\/{2,}/g, '/') || '/';
-const enPath = ptPath === '/' ? '/en' : '/en' + ptPath;
+const base = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const pathname = comBarra(base);
+const ptPath = comBarra(base.replace(/^\/en(\/|$)/, '/').replace(/\/{2,}/g, '/') || '/');
+const enPath = ptPath === '/' ? '/en/' : comBarra('/en' + ptPath);
 const altHref = lang === 'en' ? ptPath : enPath;
 const canonical = `https://malumi.pt${lang === 'en' ? enPath : ptPath}`;
 const ogImage = image.startsWith('http') ? image : `https://malumi.pt${image}`;
@@ -164,6 +165,17 @@ const ogImage = image.startsWith('http') ? image : `https://malumi.pt${image}`;
 </html>
 
 <style is:global>
+/* Texto lido por motores de busca e leitores de ecrã, invisível no ecrã. */
+.texto-oculto {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
   *, *::before, *::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   section[id] { scroll-margin-top: 90px; }

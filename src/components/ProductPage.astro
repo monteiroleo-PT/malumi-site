@@ -19,7 +19,7 @@ const metaTitulo =
     : `${vela.name} - Vela ${frag.name} - Malumi`;
 
 // --- Dados estruturados schema.org/Product ---
-const urlProduto = `https://malumi.pt${lang === 'en' ? '/en' : ''}/product/${vela.slug}`;
+const urlProduto = `https://malumi.pt${lang === 'en' ? '/en' : ''}/product/${vela.slug}/`;
 const precoNum = vela.price.replace(/[^\d.,]/g, '').replace(',', '.');
 const imagens = galeria.map((src) => `https://malumi.pt${src}`);
 

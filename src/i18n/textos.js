@@ -1132,8 +1132,20 @@ export function prefixo(lang) {
 }
 
 /** Constrói um link interno no idioma certo. L('/shop') → '/en/shop' quando lang=en */
+/**
+ * Forma canónica dos URLs do site: barra final em todas as rotas.
+ * É o que o Netlify serve (build por directório), por isso qualquer
+ * ligação sem barra final custa um redireccionamento 301.
+ * A âncora é preservada: '/shop#golden-oud' -> '/shop/#golden-oud'
+ */
+export function comBarra(path) {
+  const [base, ...resto] = String(path).split('#');
+  const ancora = resto.length ? '#' + resto.join('#') : '';
+  if (!base) return '/' + ancora;
+  return (base.endsWith('/') ? base : base + '/') + ancora;
+}
+
 export function link(lang, path) {
-  if (lang !== 'en') return path;
-  if (path === '/') return '/en/';
-  return '/en' + path;
+  const p = lang !== 'en' ? path : path === '/' ? '/en/' : '/en' + path;
+  return comBarra(p);
 }
