@@ -7,6 +7,9 @@
 // - Portes, países de envio e restantes opções são copiados do
 //   Payment Link de uma das velas: continuam a gerir-se no dashboard
 //   Stripe > Payment Links, sem tocar em código.
+// - Os portes do Payment Link valem para 1 vela. Cada vela adicional
+//   soma ACRESCIMO_POR_VELA (65%) desse valor:
+//   1 vela = 100% · 2 = 165% · 3 = 230% · 4 = 295% ...
 // - Precisa da variável de ambiente STRIPE_SECRET_KEY no Netlify.
 // ============================================================
 import { velas, fragrances } from '../../src/data/velas.js';
@@ -15,6 +18,7 @@ export const config = { path: '/api/checkout' };
 
 const STRIPE = 'https://api.stripe.com/v1';
 const MAX_POR_PECA = 10;
+const ACRESCIMO_POR_VELA = 0.65;
 
 /** '€ 68' -> 6800 (cêntimos) */
 const centimos = (price) =>
@@ -62,8 +66,20 @@ async function opcoesDoPaymentLink(chave) {
       allowed_countries: pl.shipping_address_collection.allowed_countries,
     };
   }
-  if (pl.shipping_options?.length) {
-    o.shipping_options = pl.shipping_options.map((s) => ({ shipping_rate: s.shipping_rate }));
+  // Tarifas de envio base (valor para 1 vela), lidas uma a uma.
+  const tarifas = [];
+  for (const s of pl.shipping_options || []) {
+    const id = typeof s.shipping_rate === 'string' ? s.shipping_rate : s.shipping_rate?.id;
+    const r = await stripe(`/shipping_rates/${id}`, chave);
+    if (r.type !== 'fixed_amount' || !r.fixed_amount) continue;
+    tarifas.push({
+      display_name: r.display_name,
+      amount: r.fixed_amount.amount,
+      currency: r.fixed_amount.currency,
+      tax_behavior: r.tax_behavior,
+      tax_code: typeof r.tax_code === 'string' ? r.tax_code : r.tax_code?.id,
+      delivery_estimate: r.delivery_estimate,
+    });
   }
   if (pl.billing_address_collection) o.billing_address_collection = pl.billing_address_collection;
   if (pl.phone_number_collection?.enabled) o.phone_number_collection = { enabled: true };
@@ -75,8 +91,23 @@ async function opcoesDoPaymentLink(chave) {
     o.consent_collection = { terms_of_service: pl.consent_collection.terms_of_service };
   }
 
-  cache = { quando: Date.now(), opcoes: o };
-  return o;
+  cache = { quando: Date.now(), opcoes: { sessao: o, tarifas } };
+  return cache.opcoes;
+}
+
+/** Portes escalonados: base + 65% da base por cada vela além da primeira. */
+function portes(tarifas, totalVelas) {
+  const factor = 1 + ACRESCIMO_POR_VELA * (totalVelas - 1);
+  return tarifas.map((t) => ({
+    shipping_rate_data: {
+      type: 'fixed_amount',
+      display_name: t.display_name,
+      fixed_amount: { amount: Math.round(t.amount * factor), currency: t.currency },
+      tax_behavior: t.tax_behavior,
+      tax_code: t.tax_code,
+      delivery_estimate: t.delivery_estimate,
+    },
+  }));
 }
 
 const resposta = (status, corpo) =>
@@ -139,7 +170,9 @@ export default async (req) => {
   } catch {}
 
   try {
-    const opcoes = await opcoesDoPaymentLink(chave);
+    const { sessao: opcoes, tarifas } = await opcoesDoPaymentLink(chave);
+    const totalVelas = [...qtds.values()].reduce((a, b) => a + b, 0);
+    const shipping_options = portes(tarifas, totalVelas);
     const sessao = await stripe('/checkout/sessions', chave, {
       mode: 'payment',
       locale: lang === 'en' ? 'en-GB' : 'pt',
@@ -147,6 +180,7 @@ export default async (req) => {
       success_url: `${origem}${pre}/obrigado/`,
       cancel_url: voltar,
       ...opcoes,
+      ...(shipping_options.length && { shipping_options }),
     });
     return resposta(200, { url: sessao.url });
   } catch (e) {
