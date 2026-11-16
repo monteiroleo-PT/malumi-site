@@ -51,7 +51,7 @@ const L = (p) => link(lang, p);
                   <span class="s-card-price">{v.price}</span>
                   <span class="s-card-actions">
                     <a href={L(`/product/${v.slug}`)} class="s-card-link">{t.verPeca}</a>
-                    <a href={v.stripeUrl} class="s-buy">{t.comprar}</a>
+                    <a href={v.stripeUrl} class="s-buy" data-add={v.slug}>{t.comprar}</a>
                   </span>
                 </div>
               </div>

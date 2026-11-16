@@ -26,6 +26,7 @@ export function GET() {
   for (const ficheiro of Object.keys(modulos)) {
     const rota = rotaDe(ficheiro);
     if (rota.includes('[')) continue; // rotas dinâmicas tratadas à parte
+    if (rota.endsWith('/obrigado')) continue; // página pós-compra, fora do índice
     rotas.add(rota);
   }
 

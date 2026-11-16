@@ -1,5 +1,6 @@
 ---
 import { textos, link, comBarra } from '../i18n/textos.js';
+import { velas, fragrances, fotoDe } from '../data/velas.js';
 
 const {
   lang = 'pt',
@@ -10,6 +11,8 @@ const {
   ogType = 'website',
   // Dados estruturados JSON-LD: objecto ou array de objectos schema.org
   jsonLd = null,
+  // Páginas que não devem aparecer nos motores de busca (ex.: /obrigado)
+  noindex = false,
 } = Astro.props;
 const t = textos[lang === 'en' ? 'en' : 'pt'];
 const L = (p) => link(lang, p);
@@ -22,6 +25,19 @@ const enPath = ptPath === '/' ? '/en/' : comBarra('/en' + ptPath);
 const altHref = lang === 'en' ? ptPath : enPath;
 const canonical = `https://malumi.pt${lang === 'en' ? enPath : ptPath}`;
 const ogImage = image.startsWith('http') ? image : `https://malumi.pt${image}`;
+
+// Catálogo mínimo para o carrinho (lido pelo script no fim da página).
+// O preço aqui é só para mostrar: o valor cobrado é calculado no servidor.
+const catalogoCarrinho = velas.map((v) => ({
+  slug: v.slug,
+  name: v.name,
+  frag: fragrances.find((f) => f.slug === v.fragrance).name,
+  price: parseFloat(v.price.replace(/[^\d.,]/g, '').replace(',', '.')),
+  foto: fotoDe(v.slug),
+  gradient: v.gradient,
+  url: L(`/product/${v.slug}`),
+  stripeUrl: v.stripeUrl,
+}));
 ---
 <!doctype html>
 <html lang={t.lang}>
@@ -33,6 +49,7 @@ const ogImage = image.startsWith('http') ? image : `https://malumi.pt${image}`;
   <link rel="icon" href="/favicon.ico" sizes="32x32" />
   <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  {noindex && <meta name="robots" content="noindex, follow" />}
   <link rel="canonical" href={canonical} />
   <link rel="alternate" hreflang="pt-PT" href={`https://malumi.pt${ptPath}`} />
   <link rel="alternate" hreflang="en" href={`https://malumi.pt${enPath}`} />
@@ -81,8 +98,45 @@ const ogImage = image.startsWith('http') ? image : `https://malumi.pt${image}`;
           <a href={lang === 'en' ? pathname : altHref} class={lang === 'en' ? 'on' : ''}>EN</a>
         </span>
       </nav>
+      <button class="cart-btn" type="button" data-cart-open aria-label={t.cart.abrir} aria-controls="carrinho">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5.5 8.5h13l-1 11.5h-11z" />
+          <path d="M9 8.5V7a3 3 0 0 1 6 0v1.5" />
+        </svg>
+        <span class="cart-count" data-cart-count hidden>0</span>
+      </button>
     </div>
   </header>
+
+  <!-- CARRINHO (painel lateral) -->
+  <div class="cart-overlay" data-cart-close hidden></div>
+  <aside class="cart" id="carrinho" aria-label={t.cart.titulo} aria-hidden="true" data-lang={lang === 'en' ? 'en' : 'pt'}>
+    <div class="cart-head">
+      <h2 class="cart-title">{t.cart.titulo}</h2>
+      <button class="cart-close" type="button" data-cart-close aria-label={t.cart.fechar}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" /></svg>
+      </button>
+    </div>
+    <div class="cart-empty" data-cart-empty>
+      <p>{t.cart.vazio}</p>
+      <a href={L('/shop')} class="cart-empty-link">{t.cart.verVelas}</a>
+    </div>
+    <ul class="cart-lines" data-cart-lines></ul>
+    <div class="cart-foot" data-cart-foot hidden>
+      <div class="cart-subtotal">
+        <span>{t.cart.subtotal}</span>
+        <span data-cart-subtotal></span>
+      </div>
+      <p class="cart-note">{t.cart.envioNota}</p>
+      <p class="cart-error" data-cart-error role="alert" hidden>{t.cart.erro} <a href="mailto:info@malumi.pt">info@malumi.pt</a></p>
+      <button class="cart-checkout" type="button" data-cart-checkout data-label={t.cart.finalizar} data-label-busy={t.cart.aFinalizar}>{t.cart.finalizar}</button>
+      <button class="cart-continue" type="button" data-cart-close>{t.cart.continuar}</button>
+    </div>
+  </aside>
+  <script type="application/json" id="cart-data" set:html={JSON.stringify({
+    velas: catalogoCarrinho,
+    t: { remover: t.cart.remover, menos: t.cart.menos, mais: t.cart.mais },
+  })} />
 
   <main>
     <slot />
@@ -161,6 +215,168 @@ const ogImage = image.startsWith('http') ? image : `https://malumi.pt${image}`;
       toggle?.setAttribute('aria-expanded', 'false');
     }));
   </script>
+
+  <script>
+    // ============================================================
+    // CARRINHO
+    // Guardado no browser (localStorage). Os botões com data-add="<slug>"
+    // juntam a vela ao carrinho; sem JavaScript continuam a ser links
+    // directos para o Payment Link dessa vela.
+    // O pagamento é criado em /api/checkout (netlify/functions/checkout.mjs).
+    // ============================================================
+    const CHAVE = 'malumi-cart';
+    const MAX = 10;
+    const dados = JSON.parse(document.getElementById('cart-data')?.textContent || '{"velas":[],"t":{}}');
+    const catalogo = new Map(dados.velas.map((v) => [v.slug, v]));
+    const painel = document.getElementById('carrinho');
+    const overlay = document.querySelector('.cart-overlay');
+    const $ = (sel) => painel.querySelector(sel);
+    const lang = painel.dataset.lang;
+    let memoria = [];
+    let ultimoFoco = null;
+
+    function ler() {
+      try {
+        const bruto = JSON.parse(localStorage.getItem(CHAVE) || '[]');
+        memoria = (Array.isArray(bruto) ? bruto : [])
+          .filter((i) => catalogo.has(i?.slug) && Number.isInteger(i.qty) && i.qty >= 1)
+          .map((i) => ({ slug: i.slug, qty: Math.min(MAX, i.qty) }));
+      } catch {}
+      return memoria;
+    }
+    function guardar(itens) {
+      memoria = itens;
+      try { localStorage.setItem(CHAVE, JSON.stringify(itens)); } catch {}
+      desenhar();
+    }
+    const euros = (n) => '€ ' + (Number.isInteger(n) ? n : n.toFixed(2).replace('.', ','));
+
+    function el(tag, attrs = {}, ...filhos) {
+      const e = document.createElement(tag);
+      for (const [k, v] of Object.entries(attrs)) {
+        if (k === 'class') e.className = v;
+        else if (k === 'text') e.textContent = v;
+        else e.setAttribute(k, v);
+      }
+      e.append(...filhos);
+      return e;
+    }
+
+    function desenhar() {
+      const itens = memoria;
+      const total = itens.reduce((s, i) => s + i.qty, 0);
+      document.querySelectorAll('[data-cart-count]').forEach((c) => {
+        c.textContent = String(total);
+        c.hidden = total === 0;
+      });
+      $('[data-cart-empty]').hidden = itens.length > 0;
+      $('[data-cart-foot]').hidden = itens.length === 0;
+
+      const lista = $('[data-cart-lines]');
+      lista.replaceChildren(...itens.map((i) => {
+        const v = catalogo.get(i.slug);
+        const img = el('a', { class: 'cart-line-img', href: v.url, 'aria-label': v.name });
+        img.style.background = v.foto ? `url('${v.foto}') center/cover` : v.gradient;
+        return el('li', { class: 'cart-line' },
+          img,
+          el('div', { class: 'cart-line-info' },
+            el('a', { class: 'cart-line-name', href: v.url, text: v.name }),
+            el('div', { class: 'cart-line-frag', text: v.frag.toUpperCase() }),
+            el('div', { class: 'cart-line-qty' },
+              el('button', { type: 'button', 'data-qty': '-1', 'data-slug': i.slug, 'aria-label': dados.t.menos, text: '−' }),
+              el('span', { text: String(i.qty) }),
+              el('button', { type: 'button', 'data-qty': '1', 'data-slug': i.slug, 'aria-label': dados.t.mais, text: '+', ...(i.qty >= MAX && { disabled: '' }) }),
+            ),
+          ),
+          el('div', { class: 'cart-line-side' },
+            el('span', { class: 'cart-line-price', text: euros(v.price * i.qty) }),
+            el('button', { type: 'button', class: 'cart-line-remove', 'data-remove': i.slug, text: dados.t.remover }),
+          ),
+        );
+      }));
+      $('[data-cart-subtotal]').textContent = euros(itens.reduce((s, i) => s + catalogo.get(i.slug).price * i.qty, 0));
+    }
+
+    function mudar(slug, delta) {
+      const itens = memoria.map((i) => ({ ...i }));
+      const item = itens.find((i) => i.slug === slug);
+      if (item) item.qty = Math.min(MAX, item.qty + delta);
+      else if (delta > 0) itens.push({ slug, qty: 1 });
+      guardar(itens.filter((i) => i.qty >= 1));
+    }
+
+    function abrir() {
+      ultimoFoco = document.activeElement;
+      $('[data-cart-error]').hidden = true;
+      overlay.hidden = false;
+      painel.setAttribute('aria-hidden', 'false');
+      document.documentElement.classList.add('cart-open');
+      $('.cart-close').focus({ preventScroll: true });
+    }
+    function fechar() {
+      overlay.hidden = true;
+      painel.setAttribute('aria-hidden', 'true');
+      document.documentElement.classList.remove('cart-open');
+      ultimoFoco?.focus?.({ preventScroll: true });
+    }
+
+    async function finalizar(botao) {
+      const itens = memoria;
+      if (!itens.length) return;
+      const erro = $('[data-cart-error]');
+      erro.hidden = true;
+      botao.disabled = true;
+      botao.textContent = botao.dataset.labelBusy;
+      try {
+        const res = await fetch('/api/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lang, items: itens, voltar: location.href }),
+        });
+        const json = await res.json();
+        if (!res.ok || !json.url) throw new Error(json.error || 'checkout');
+        location.href = json.url;
+      } catch {
+        // Rede de segurança: com um só modelo, segue para o Payment Link dele.
+        if (itens.length === 1) {
+          location.href = catalogo.get(itens[0].slug).stripeUrl;
+          return;
+        }
+        erro.hidden = false;
+        botao.disabled = false;
+        botao.textContent = botao.dataset.label;
+      }
+    }
+
+    document.addEventListener('click', (ev) => {
+      const alvo = ev.target.closest('[data-add], [data-cart-open], [data-cart-close], [data-qty], [data-remove], [data-cart-checkout]');
+      if (!alvo) return;
+      if (alvo.matches('[data-add]')) {
+        if (!catalogo.has(alvo.dataset.add)) return; // segue o link normal
+        ev.preventDefault();
+        mudar(alvo.dataset.add, 1);
+        abrir();
+      } else if (alvo.matches('[data-cart-open]')) abrir();
+      else if (alvo.matches('[data-cart-close]')) fechar();
+      else if (alvo.matches('[data-qty]')) mudar(alvo.dataset.slug, Number(alvo.dataset.qty));
+      else if (alvo.matches('[data-remove]')) mudar(alvo.dataset.remove, -MAX);
+      else if (alvo.matches('[data-cart-checkout]')) finalizar(alvo);
+    });
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape' && painel.getAttribute('aria-hidden') === 'false') fechar();
+    });
+    // Outro separador mexeu no carrinho, ou o cliente voltou atrás do Stripe.
+    window.addEventListener('storage', (ev) => { if (ev.key === CHAVE) { ler(); desenhar(); } });
+    window.addEventListener('pageshow', () => {
+      const b = $('[data-cart-checkout]');
+      b.disabled = false;
+      b.textContent = b.dataset.label;
+      ler();
+      desenhar();
+    });
+    ler();
+    desenhar();
+  </script>
 </body>
 </html>
 
@@ -209,6 +425,7 @@ const ogImage = image.startsWith('http') ? image : `https://malumi.pt${image}`;
     align-items: center;
     justify-content: space-between;
   }
+  .header-logo { margin-right: auto; }
   .header-logo img { height: 30px; width: auto; display: block; }
   .main-nav { display: flex; gap: 36px; align-items: center; }
   .main-nav a {
@@ -252,6 +469,202 @@ const ogImage = image.startsWith('http') ? image : `https://malumi.pt${image}`;
     background: #1B2A39;
     margin: 6px 0;
   }
+
+  /* CARRINHO */
+  .cart-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    background: none;
+    border: none;
+    padding: 6px;
+    margin-left: 22px;
+    color: #1B2A39;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .cart-btn svg { width: 22px; height: 22px; display: block; }
+  .cart-btn:hover { color: #5F5E5A; }
+  .cart-count {
+    position: absolute;
+    top: -2px;
+    right: -6px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 8px;
+    background: #A85738;
+    color: #F4F1EA;
+    font-size: 9px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: center;
+    letter-spacing: 0;
+  }
+  .cart-count[hidden] { display: none; }
+  html.cart-open { overflow: hidden; }
+  .cart-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(27, 42, 57, 0.35);
+  }
+  .cart-overlay[hidden] { display: none; }
+  .cart {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 210;
+    width: min(420px, 100vw);
+    background: #F4F1EA;
+    border-left: 0.5px solid #D8D2C8;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform 0.35s ease, visibility 0s linear 0.35s;
+  }
+  .cart[aria-hidden="false"] {
+    transform: none;
+    visibility: visible;
+    transition: transform 0.35s ease;
+  }
+  .cart-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 26px 28px 22px;
+    border-bottom: 0.5px solid #E3DFD5;
+  }
+  .cart-title {
+    margin: 0;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: #1B2A39;
+  }
+  .cart-close {
+    background: none;
+    border: none;
+    padding: 4px;
+    color: #1B2A39;
+    cursor: pointer;
+  }
+  .cart-close svg { width: 18px; height: 18px; display: block; }
+  .cart-empty { padding: 48px 28px; text-align: center; }
+  .cart-empty[hidden] { display: none; }
+  .cart-empty p { margin: 0 0 24px; font-style: italic; color: #5F5E5A; font-size: 15px; }
+  .cart-empty-link {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    font-weight: 400;
+    color: #1B2A39;
+    border-bottom: 0.5px solid #1B2A39;
+    padding-bottom: 3px;
+  }
+  .cart-lines {
+    list-style: none;
+    margin: 0;
+    padding: 0 28px;
+    flex: 1;
+    overflow-y: auto;
+  }
+  .cart-line {
+    display: flex;
+    gap: 16px;
+    padding: 22px 0;
+    border-bottom: 0.5px solid #E3DFD5;
+  }
+  .cart-line-img { flex: 0 0 72px; height: 90px; display: block; }
+  .cart-line-info { flex: 1; min-width: 0; }
+  .cart-line-name { display: block; font-size: 17px; font-weight: 300; color: #1B2A39; line-height: 1.2; }
+  .cart-line-frag { margin-top: 5px; font-size: 9px; letter-spacing: 2px; color: #8F9491; font-weight: 400; }
+  .cart-line-qty {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 14px;
+    border: 0.5px solid #D8D2C8;
+  }
+  .cart-line-qty button {
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: none;
+    color: #1B2A39;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 200;
+    cursor: pointer;
+  }
+  .cart-line-qty button:disabled { color: #D8D2C8; cursor: default; }
+  .cart-line-qty span { min-width: 22px; text-align: center; font-size: 13px; font-weight: 300; color: #1B2A39; }
+  .cart-line-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .cart-line-price { font-size: 15px; font-weight: 300; color: #1B2A39; white-space: nowrap; }
+  .cart-line-remove {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 200;
+    color: #8F9491;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .cart-line-remove:hover { color: #1B2A39; }
+  .cart-foot { padding: 22px 28px 28px; border-top: 0.5px solid #D8D2C8; }
+  .cart-foot[hidden] { display: none; }
+  .cart-subtotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    font-weight: 400;
+    color: #1B2A39;
+  }
+  .cart-subtotal span:last-child { font-size: 20px; letter-spacing: 0; font-weight: 300; }
+  .cart-note { margin: 6px 0 20px; font-size: 12px; color: #6B6B6B; }
+  .cart-error { margin: 0 0 16px; font-size: 13px; color: #A85738; line-height: 1.5; }
+  .cart-error[hidden] { display: none; }
+  .cart-error a { color: inherit; text-decoration: underline; }
+  .cart-checkout {
+    display: block;
+    width: 100%;
+    padding: 17px 20px;
+    background: #1B2A39;
+    color: #F4F1EA;
+    border: 0.5px solid #1B2A39;
+    font-family: inherit;
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .cart-checkout:hover:not(:disabled) { background: transparent; color: #1B2A39; }
+  .cart-checkout:disabled { opacity: 0.6; cursor: default; }
+  .cart-continue {
+    display: block;
+    margin: 16px auto 0;
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 200;
+    font-style: italic;
+    color: #5F5E5A;
+    cursor: pointer;
+  }
+  .cart-continue:hover { color: #1B2A39; }
 
   /* FOOTER */
   .site-footer {
@@ -344,7 +757,10 @@ const ogImage = image.startsWith('http') ? image : `https://malumi.pt${image}`;
 
   @media (max-width: 760px) {
     .header-inner { padding: 16px 24px; }
-    .menu-toggle { display: block; }
+    .menu-toggle { display: block; order: 2; margin-left: 10px; }
+    .cart-btn { margin-left: 0; }
+    .cart-head, .cart-foot { padding-left: 22px; padding-right: 22px; }
+    .cart-lines { padding: 0 22px; }
     .main-nav {
       display: none;
       position: absolute;

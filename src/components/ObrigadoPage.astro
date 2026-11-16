@@ -1,0 +1,68 @@
+---
+// Página de regresso depois do pagamento no Stripe (success_url do checkout).
+import Base from '../layouts/Base.astro';
+import { textos, link } from '../i18n/textos.js';
+
+const { lang = 'pt' } = Astro.props;
+const t = textos[lang === 'en' ? 'en' : 'pt'].obrigado;
+const L = (p) => link(lang, p);
+---
+<Base lang={lang} title={t.metaTitle} description={t.metaDesc} noindex>
+
+<!-- Compra concluída: esvazia o carrinho antes de o cabeçalho o desenhar. -->
+<script is:inline>
+  try { localStorage.removeItem('malumi-cart'); } catch (e) {}
+</script>
+
+<section class="ob">
+  <div class="ob-inner">
+    <div class="ob-eyebrow">{t.eyebrow}</div>
+    <h1 class="ob-titulo" set:html={t.titulo} />
+    <p class="ob-texto">{t.texto}</p>
+    <p class="ob-nota">{t.nota}</p>
+    <a href={L('/shop')} class="ob-cta">{t.cta}</a>
+    <p class="ob-contacto">{t.contacto} <a href="mailto:info@malumi.pt">info@malumi.pt</a></p>
+  </div>
+</section>
+
+</Base>
+
+<style>
+.ob { padding: 140px 40px 160px; }
+.ob-inner { max-width: 620px; margin: 0 auto; text-align: center; }
+.ob-eyebrow {
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: #A85738;
+  font-weight: 400;
+  margin-bottom: 28px;
+}
+.ob-titulo {
+  font-size: 54px;
+  font-weight: 300;
+  color: #1B2A39;
+  line-height: 1.1;
+  margin: 0 0 32px;
+}
+.ob-titulo :global(em) { font-style: italic; font-weight: 200; }
+.ob-texto { font-size: 17px; color: #2A2A2A; margin: 0 0 12px; }
+.ob-nota { font-size: 15px; font-style: italic; color: #5F5E5A; margin: 0 0 44px; }
+.ob-cta {
+  display: inline-block;
+  padding: 16px 40px;
+  background: #1B2A39;
+  color: #F4F1EA;
+  border: 0.5px solid #1B2A39;
+  font-size: 11px;
+  letter-spacing: 3px;
+  font-weight: 400;
+  transition: all 0.3s;
+}
+.ob-cta:hover { background: transparent; color: #1B2A39; }
+.ob-contacto { margin: 56px 0 0; font-size: 13px; color: #6B6B6B; }
+.ob-contacto a { color: #1B2A39; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 760px) {
+  .ob { padding: 90px 24px 110px; }
+  .ob-titulo { font-size: 40px; }
+}
+</style>

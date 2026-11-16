@@ -35,7 +35,7 @@ const jsonLd = {
   category: lang === 'en' ? 'Scented candle' : 'Vela perfumada',
   offers: {
     '@type': 'Offer',
-    url: vela.stripeUrl || urlProduto,
+    url: urlProduto,
     price: precoNum,
     priceCurrency: 'EUR',
     availability: 'https://schema.org/InStock',
@@ -94,7 +94,7 @@ const jsonLd = {
       <div class="p-fragrance">{frag.name.toUpperCase()} · {frag.family}</div>
       <p class="p-line">{vela.line}</p>
       <div class="p-price">{vela.price}</div>
-      <a href={vela.stripeUrl} class="p-buy">{t.comprar}</a>
+      <a href={vela.stripeUrl} class="p-buy" data-add={vela.slug}>{t.comprar}</a>
       <div class="p-ship">{t.envio}</div>
     </div>
   </div>

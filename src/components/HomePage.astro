@@ -103,7 +103,7 @@ const jsonLd = [
                   <span class="m-card-price">{v.price}</span>
                   <span class="m-card-actions">
                     <a href={L(`/product/${v.slug}`)} class="m-card-link">{t.verPeca}</a>
-                    <a href={v.stripeUrl} class="m-buy">{tShop.comprar}</a>
+                    <a href={v.stripeUrl} class="m-buy" data-add={v.slug}>{tShop.comprar}</a>
                   </span>
                 </div>
               </div>
